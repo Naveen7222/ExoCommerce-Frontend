@@ -1,61 +1,71 @@
 // src/components/ui/Button.jsx
 import React from 'react';
-import clsx from 'clsx'; 
-import { Link } from 'react-router-dom'; // Import Link for routing support
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
-// 1. Define Style Mapping based on the 'variant' prop
 const variantClasses = {
-  // Uses custom primary-500 from tailwind.config.js
-  primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500',
-  // Uses Tailwind default grays for a muted look
-  secondary: 'bg-gray-200 text-text-base hover:bg-gray-300 focus:ring-gray-300', 
-  // Uses custom danger color (if defined) or a standard red
-  danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600', 
-  // For text-only links/buttons
-  ghost: 'bg-transparent text-primary-500 hover:text-primary-600 hover:bg-gray-100 focus:ring-primary-500 border-none',
+  primary: 'bg-violet-600 text-white hover:bg-violet-700 focus:ring-violet-500',
+  secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-300',
+  danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
+  ghost: 'bg-transparent text-violet-600 hover:bg-violet-50 focus:ring-violet-500',
+  gradient: 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg transform hover:-translate-y-0.5 focus:ring-violet-500',
+  outline: 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-300'
 };
 
-// 2. Define Size Mapping based on the 'size' prop
 const sizeClasses = {
   sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base', // Standard/Default size
-  lg: 'px-6 py-3 text-lg',
+  md: 'px-6 py-3 text-base',
+  lg: 'px-8 py-4 text-lg',
+  icon: 'p-2.5', // For icon-only buttons
 };
 
-// 3. The main Button component definition
 export function Button({
   children,
-  variant = 'primary',    // Default: brand color
-  size = 'md',            // Default: medium
-  className,              // For external custom classes
-  to,                     // Optional prop for React Router Link
-  ...props                // Catch-all for standard HTML attributes (onClick, type, disabled)
+  variant = 'primary',
+  size = 'md',
+  className,
+  to,
+  isLoading = false,
+  startIcon,
+  endIcon,
+  disabled,
+  ...props
 }) {
-  // Styles applied to ALL buttons
-  const baseClasses = 
-    'font-semibold rounded-ecom-md shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center';
+  const baseClasses =
+    'font-semibold rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none inline-flex items-center justify-center';
 
-  // Combine all class strings using clsx for conditional class management
   const classes = clsx(
     baseClasses,
-    variantClasses[variant], // Add the variant styles
-    sizeClasses[size],       // Add the size styles
-    className,               // Add any external classes
+    variantClasses[variant],
+    sizeClasses[size],
+    className,
   );
 
-  // If 'to' prop is present, render as a React Router Link
-  if (to) {
+  const content = (
+    <>
+      {isLoading && (
+        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      )}
+      {!isLoading && startIcon && <span className="mr-2">{startIcon}</span>}
+      {children}
+      {!isLoading && endIcon && <span className="ml-2">{endIcon}</span>}
+    </>
+  );
+
+  if (to && !disabled) {
     return (
       <Link to={to} className={classes} {...props}>
-        {children}
+        {content}
       </Link>
     );
   }
 
-  // Otherwise, render as a standard HTML button
   return (
-    <button className={classes} {...props}>
-      {children}
+    <button className={classes} disabled={disabled || isLoading} {...props}>
+      {content}
     </button>
   );
 }   

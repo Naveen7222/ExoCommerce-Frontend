@@ -1,16 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "./layouts/AppLayout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <h1 className='bg-amber-400'>hello tailwind css</h1>
-    </>
-  )
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+    ],
+  },
+]);
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App
