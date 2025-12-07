@@ -44,6 +44,12 @@ export default function Navbar() {
               About
             </Link>
             <Link
+              to="/add-product"
+              className="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-200"
+            >
+              Add Product
+            </Link>
+            <Link
               to="/contact"
               className="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-200"
             >

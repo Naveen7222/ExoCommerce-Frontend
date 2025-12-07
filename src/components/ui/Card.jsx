@@ -6,7 +6,7 @@ export function Card({ children, className }) {
   return (
     <div
       className={clsx(
-        "bg-white rounded-xl shadow-md border border-neutral-200 overflow-hidden",
+        "bg-white rounded-xl shadow-md border border-neutral-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1",
         className
       )}
     >
@@ -20,7 +20,7 @@ export function CardHeader({ children, className }) {
   return (
     <div
       className={clsx(
-        "p-4 border-b border-neutral-200 font-semibold text-neutral-900",
+        "p-4 border-b border-neutral-100 font-semibold text-neutral-900 text-lg",
         className
       )}
     >
@@ -29,10 +29,23 @@ export function CardHeader({ children, className }) {
   );
 }
 
+// ---------- Card Image ----------
+export function CardImage({ src, alt, className }) {
+  return (
+    <div className={clsx("w-full h-48 overflow-hidden bg-neutral-100", className)}>
+      <img
+        src={src}
+        alt={alt || "Card Image"}
+        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+      />
+    </div>
+  );
+}
+
 // ---------- Card Body ----------
 export function CardBody({ children, className }) {
   return (
-    <div className={clsx("p-4 text-neutral-800", className)}>
+    <div className={clsx("p-4 text-neutral-600 text-sm leading-relaxed", className)}>
       {children}
     </div>
   );
@@ -43,7 +56,7 @@ export function CardFooter({ children, className }) {
   return (
     <div
       className={clsx(
-        "p-4 border-t border-neutral-200 bg-neutral-50 text-neutral-700",
+        "p-4 border-t border-neutral-100 bg-neutral-50 flex justify-end gap-2",
         className
       )}
     >
