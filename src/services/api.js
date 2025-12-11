@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/products";
+const API_URL = "/products";
 
 export const fetchProducts = async () => {
     try {
@@ -11,13 +11,13 @@ export const fetchProducts = async () => {
         throw error;
     }
 };
-
-export const addProduct = async (product) => {
+// api.js
+export const addProduct = async (formData) => {
     try {
-        const response = await axios.post(API_URL, product, {
+        const response = await axios.post(API_URL, formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
-            },
+                'Content-Type': 'multipart/form-data'
+            }
         });
         return response.data;
     } catch (error) {
@@ -25,3 +25,16 @@ export const addProduct = async (product) => {
         throw error;
     }
 };
+// export const addProduct = async (formData) => {
+//     try {
+//         const response = await axios.post(API_URL, formData, {
+//             headers: {
+//                 "Content-Type": "multipart/form-data",
+//             },
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error adding product:", error);
+//         throw error;
+//     }
+// };

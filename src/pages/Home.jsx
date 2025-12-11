@@ -54,12 +54,16 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {products.map((product) => (
           <Card key={product.id} className="h-full flex flex-col">
-            <CardImage src={product.image} alt={product.title} />
-            <CardHeader>{product.title}</CardHeader>
+            <CardImage
+              src={`/products/images/${product.imageUrl}`}
+              alt={product.name}
+              onError={(e) => { e.target.src = "https://placehold.co/600x400?text=No+Image"; }}
+            />
+            <CardHeader>{product.name}</CardHeader>
             <CardBody className="flex-grow">
               <p className="mb-4">{product.description}</p>
               <div className="font-bold text-lg text-primary-600">
-                {product.price}
+                ${product.price}
               </div>
             </CardBody>
             <CardFooter>

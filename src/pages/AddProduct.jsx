@@ -60,11 +60,15 @@ export default function AddProduct() {
                 throw new Error("Please select an image");
             }
 
+            const productData = {
+                name: formData.name,
+                description: formData.description,
+                price: price,
+                category: formData.category,
+            };
+
             const data = new FormData();
-            data.append("name", formData.name);
-            data.append("description", formData.description);
-            data.append("price", price);
-            data.append("category", formData.category);
+            data.append("dto", new Blob([JSON.stringify(productData)], { type: "application/json" }));
             data.append("image", imageFile);
 
             await addProduct(data);
