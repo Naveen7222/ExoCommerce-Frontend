@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+   base: '/exocommerce/',
   plugins: [
     react(),
     tailwindcss(),
@@ -12,8 +13,8 @@ export default defineConfig({
     proxy: {
       '/products': {
         target: 'http://localhost:8080',
-        changeOrigin: true,
       },
     },
+    historyApiFallback: true, 
   },
 })

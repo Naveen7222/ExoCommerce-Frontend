@@ -1,18 +1,33 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import { loginUser } from "../services/api";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
-    // Later: Call API to login
+    try {
+      const response = await loginUser({ email, password });
+
+      // Assuming response contains a token or user info
+      // You might need to adjust this depending on your backend response structure
+      if (response) {
+        // Store auth token if available (example: localStorage.setItem("token", response.token))
+        // localStorage.setItem("user", JSON.stringify(response));
+
+        navigate("/"); // Redirect to home/dashboard
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Invalid email or password");
+    }
   };
 
   return (
@@ -115,7 +130,7 @@ export default function Login() {
 
           {/* Sign up link */}
           <p className="mt-8 text-center text-sm text-gray-600">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link to="/register" className="font-semibold text-violet-600 hover:text-violet-700 transition-colors">
               Sign up for free
             </Link>

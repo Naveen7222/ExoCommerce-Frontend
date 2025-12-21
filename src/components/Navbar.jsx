@@ -49,12 +49,6 @@ export default function Navbar() {
             >
               Add Product
             </Link>
-            <Link
-              to="/contact"
-              className="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-200"
-            >
-              Contact
-            </Link>
           </div>
 
           {/* Right Side - Auth */}

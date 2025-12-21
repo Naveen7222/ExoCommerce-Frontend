@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addProduct } from "../services/api";
 import { Button } from "../components/ui/Button";
+
 import Input from "../components/ui/Input";
+import { fetchCategories } from "../services/api";
 
 export default function AddProduct() {
     const navigate = useNavigate();
@@ -10,12 +12,26 @@ export default function AddProduct() {
         name: "",
         description: "",
         price: "",
+        stock: 50,
         category: "",
     });
+    const [categories, setCategories] = useState([]);
     const [imageFile, setImageFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    React.useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const data = await fetchCategories();
+                setCategories(data);
+            } catch (err) {
+                console.error("Failed to load categories", err);
+            }
+        };
+        loadCategories();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -56,20 +72,21 @@ export default function AddProduct() {
                 throw new Error("Price must be a valid number");
             }
 
-            if (!imageFile) {
-                throw new Error("Please select an image");
-            }
+
 
             const productData = {
                 name: formData.name,
                 description: formData.description,
                 price: price,
-                category: formData.category,
+                stock: Number(formData.stock),
+                categoryId: Number(formData.category),
             };
 
             const data = new FormData();
             data.append("dto", new Blob([JSON.stringify(productData)], { type: "application/json" }));
-            data.append("image", imageFile);
+            if (imageFile) {
+                data.append("image", imageFile);
+            }
 
             await addProduct(data);
             navigate("/");
@@ -126,12 +143,34 @@ export default function AddProduct() {
                         />
 
                         <Input
-                            label="Category"
-                            name="category"
-                            value={formData.category}
+                            label="Stock"
+                            name="stock"
+                            type="number"
+                            value={formData.stock}
                             onChange={handleChange}
-                            placeholder="Electronics"
+                            placeholder="50"
+                            required
                         />
+
+                        <div className="flex flex-col mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Category
+                            </label>
+                            <select
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition duration-200 outline-none"
+                                required
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     <div className="flex flex-col mb-4">
@@ -149,7 +188,6 @@ export default function AddProduct() {
                  file:bg-violet-50 file:text-violet-700
                  hover:file:bg-violet-100
                "
-                            required
                         />
                     </div>
 
@@ -177,7 +215,7 @@ export default function AddProduct() {
                         </Button>
                     </div>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
