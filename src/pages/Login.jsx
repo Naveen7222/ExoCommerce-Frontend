@@ -4,34 +4,51 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { loginUser } from "../services/api";
+import Toast from "../components/ui/Toast";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "success" });
+  const [loading, setLoading] = useState(false);
+
+  const showToast = (message, type) => {
+    setToast({ message, type });
+  };
+
+  const closeToast = () => {
+    setToast({ message: "", type: "success" });
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await loginUser({ email, password });
 
-      // Assuming response contains a token or user info
-      // You might need to adjust this depending on your backend response structure
       if (response) {
-        // Store auth token if available (example: localStorage.setItem("token", response.token))
-        // localStorage.setItem("user", JSON.stringify(response));
-
-        navigate("/"); // Redirect to home/dashboard
+        showToast("Login successful! Redirecting...", "success");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Invalid email or password");
+      showToast("Invalid email or password. Please try again.", "error");
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-700 to-indigo-800">
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={closeToast}
+      />
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
@@ -45,7 +62,7 @@ export default function Login() {
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-2xl mb-4 shadow-lg">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-2xl mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
@@ -104,7 +121,6 @@ export default function Login() {
               }
             />
 
-            {/* Remember me & Forgot password */}
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center cursor-pointer group">
                 <input
@@ -118,17 +134,16 @@ export default function Login() {
               </a>
             </div>
 
-            {/* Submit Button */}
             <Button
               type="submit"
               variant="gradient"
-              className="w-full py-3 shadow-lg hover:shadow-xl"
+              className="w-full py-3 shadow-lg hover:shadow-xl transform transition-all active:scale-[0.98]"
+              loading={loading}
             >
               Sign In
             </Button>
           </form>
 
-          {/* Sign up link */}
           <p className="mt-8 text-center text-sm text-gray-600">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="font-semibold text-violet-600 hover:text-violet-700 transition-colors">
@@ -137,7 +152,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Footer text */}
         <p className="mt-6 text-center text-sm text-white/80">
           Protected by industry-standard encryption
         </p>
