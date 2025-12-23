@@ -15,8 +15,15 @@ export const fetchProducts = async () => {
   return data;
 };
 
+// 🔹 ADD PRODUCT
 export const addProduct = async (formData) => {
   const { data } = await api.post("/products", formData);
+  console.log("products", data);
+  return data;
+};
+// 🔹 UPDATE PRODUCT
+export const updateProduct = async (id, formData) => {
+  const { data } = await api.put(`/products/${id}`, formData);
   return data;
 };
 export const deleteProduct = async (id) => {
