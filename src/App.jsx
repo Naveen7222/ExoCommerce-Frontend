@@ -3,24 +3,54 @@ import AppLayout from "./layouts/AppLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import AddProduct from "./pages/AddProduct";
 import ProductDetails from "./pages/ProductDetails";
+
+import AdminProducts from "./admin/AdminProducts";
+import AddProduct from "./admin/AddProduct";
+import EditProduct from "./admin/EditProduct";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter(
   [
     {
       element: <AppLayout />,
       children: [
+        // ===== PUBLIC / USER ROUTES =====
         { path: "/", element: <Home /> },
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
-        { path: "/add-product", element: <AddProduct /> },
         { path: "/products/:id", element: <ProductDetails /> },
+
+        // ===== ADMIN ROUTES =====
+        {
+          path: "/admin/products",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminProducts />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/admin/products/add",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AddProduct />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/admin/products/edit/:id",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <EditProduct />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
   ],
   {
-    basename: "/exocommerce", // ✅ This is the correct place
+    basename: "/exocommerce",
   }
 );
 

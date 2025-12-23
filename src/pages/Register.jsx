@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
-import {
-  registerAuthUser,
-  createUserProfile,
-} from "../services/api";
+import { registerAuthUser, createUserProfile } from "../services/api";
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -99,9 +96,7 @@ export default function Register() {
         <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
 
         {error && (
-          <div className="text-red-600 text-sm text-center mb-3">
-            {error}
-          </div>
+          <div className="text-red-600 text-sm text-center mb-3">{error}</div>
         )}
 
         <form onSubmit={handleRegister} className="space-y-4">
@@ -116,9 +111,7 @@ export default function Register() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-400 text-sm">
-                    Upload
-                  </span>
+                  <span className="text-gray-400 text-sm">Upload</span>
                 )}
               </div>
               <input

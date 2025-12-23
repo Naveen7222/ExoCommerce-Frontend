@@ -19,6 +19,13 @@ export const addProduct = async (formData) => {
   const { data } = await api.post("/products", formData);
   return data;
 };
+export const deleteProduct = async (id) => {
+  await api.delete(`/products/${id}`);
+};
+
+/* ========================
+   CATEGORIES
+======================== */
 
 export const fetchCategories = async () => {
   const { data } = await api.get("/categories");
