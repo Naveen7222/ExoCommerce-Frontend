@@ -4,11 +4,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductDetails from "./pages/ProductDetails";
+import NotFound from "./pages/NotFound";
+
 
 import AdminProducts from "./admin/AdminProducts";
 import AddProduct from "./admin/AddProduct";
 import EditProduct from "./admin/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./admin/AdminDashboard";
 
 const router = createBrowserRouter(
   [
@@ -22,6 +25,14 @@ const router = createBrowserRouter(
         { path: "/products/:id", element: <ProductDetails /> },
 
         // ===== ADMIN ROUTES =====
+        {
+          path: "/admin",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          ),
+        },
         {
           path: "/admin/products",
           element: (
@@ -45,6 +56,10 @@ const router = createBrowserRouter(
               <EditProduct />
             </ProtectedRoute>
           ),
+        },
+        {
+          path: "*",
+          element: <NotFound/>,
         },
       ],
     },
