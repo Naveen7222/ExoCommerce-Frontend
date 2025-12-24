@@ -36,7 +36,7 @@ export default function Input({
           rows={multiline ? rows : undefined}
           className={clsx(
             "w-full border border-gray-300 rounded-lg py-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200",
-            startIcon && "pl-10",
+            startIcon ? "pl-10" : "pl-4",
             endIcon ? "pr-12" : "pr-4",
             error && "border-red-500 focus:ring-red-500",
             multiline && "resize-none",

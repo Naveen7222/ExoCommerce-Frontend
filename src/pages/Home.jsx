@@ -10,6 +10,8 @@ import {
 import { Button } from "../components/ui/Button";
 import { fetchProducts } from "../services/api";
 
+import ChakraLoader from "../components/ui/ChakraLoader";
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,8 +36,10 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen text-xl text-neutral-600">
-        Loading...
+      <div className="flex justify-center items-center h-screen w-full">
+        <div className="w-full max-w-lg">
+          <ChakraLoader manualLoading={true} size="md" position="relative" />
+        </div>
       </div>
     );
   }

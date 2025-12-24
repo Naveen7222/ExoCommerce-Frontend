@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductDetails from "./pages/ProductDetails";
 import NotFound from "./pages/NotFound";
-
+import TestLoader from "./pages/TestLoader";
 
 import AdminProducts from "./admin/AdminProducts";
 import AddProduct from "./admin/AddProduct";
@@ -23,6 +23,7 @@ const router = createBrowserRouter(
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
         { path: "/products/:id", element: <ProductDetails /> },
+        { path: "/test-loader", element: <TestLoader /> },
 
         // ===== ADMIN ROUTES =====
         {
@@ -59,7 +60,7 @@ const router = createBrowserRouter(
         },
         {
           path: "*",
-          element: <NotFound/>,
+          element: <NotFound />,
         },
       ],
     },
