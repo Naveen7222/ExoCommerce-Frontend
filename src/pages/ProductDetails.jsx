@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/Button";
 
+import ChakraLoader from "../components/ui/ChakraLoader";
+
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -26,11 +28,7 @@ export default function ProductDetails() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen text-xl text-neutral-600">
-        Loading product...
-      </div>
-    );
+    return <ChakraLoader manualLoading={true} />;
   }
 
   if (error) {

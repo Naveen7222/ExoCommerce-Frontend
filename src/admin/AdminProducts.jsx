@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchProducts, deleteProduct } from "../services/api";
+import {
+  fetchProducts,
+  fetchCategories,
+  deleteProduct,
+} from "../services/api";
+
 import { Button } from "../components/ui/Button";
+import ChakraLoader from "../components/ui/ChakraLoader";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const loadProducts = async () => {
+      setLoading(true);
       try {
-        const data = await fetchProducts();
+        const data = await fetchProducts(selectedCategory);
         setProducts(data);
       } catch (err) {
         console.error(err);
@@ -22,7 +33,21 @@ export default function AdminProducts() {
     };
 
     loadProducts();
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+
+    loadCategories();
   }, []);
+
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
@@ -41,11 +66,7 @@ export default function AdminProducts() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 text-gray-600">
-        Loading products...
-      </div>
-    );
+    return <ChakraLoader manualLoading={true} />;
   }
 
   if (error) {
@@ -63,6 +84,28 @@ export default function AdminProducts() {
           Manage Products
         </h1>
 
+        <div className="flex gap-3 mb-6 flex-wrap">
+          <Button
+            size="sm"
+            variant={!selectedCategory ? "default" : "outline"}
+            onClick={() => setSelectedCategory(null)}
+          >
+            All
+          </Button>
+
+          {categories.map((cat) => (
+            <Button
+              key={cat.id}
+              size="sm"
+              variant={selectedCategory === cat.id ? "default" : "outline"}
+              onClick={() => setSelectedCategory(cat.id)}
+            >
+              {cat.name}
+            </Button>
+          ))}
+        </div>
+
+
         <Link to="/admin/products/add">
           <Button>Add Product</Button>
         </Link>
@@ -74,6 +117,7 @@ export default function AdminProducts() {
             <tr className="text-left text-sm font-semibold text-gray-700">
               <th className="p-3">Image</th>
               <th className="p-3">Name</th>
+              <th className="p-3">Category</th>
               <th className="p-3">Price</th>
               <th className="p-3 text-right">Actions</th>
             </tr>
@@ -100,6 +144,10 @@ export default function AdminProducts() {
 
                   <td className="p-3 font-medium text-gray-800">
                     {product.name}
+                  </td>
+
+                  <td className="p-3 text-gray-700">
+                    {product.categoryName || "—"}
                   </td>
 
                   <td className="p-3 text-gray-700">

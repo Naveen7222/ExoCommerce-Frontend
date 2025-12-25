@@ -45,8 +45,16 @@ export default api;
 /* ========================
    PRODUCTS
 ======================== */
-export const fetchProducts = async () => {
-  const { data } = await api.get("/products");
+export const fetchProducts = async (categoryId) => {
+  const url = categoryId
+    ? `/products?categoryId=${categoryId}`
+    : "/products";
+
+  const { data } = await api.get(url);
+  return data;
+};
+export const fetchProductById = async (id) => {
+  const { data } = await api.get(`/products/${id}`);
   return data;
 };
 
@@ -73,6 +81,12 @@ export const fetchCategories = async () => {
   const { data } = await api.get("/categories");
   return data;
 };
+
+export const addCategory = async (payload) => {
+  const { data } = await api.post("/categories", payload);
+  return data;
+};
+
 
 /* ========================
    AUTH
@@ -101,4 +115,28 @@ export const loginUser = async (credentials) => {
 export const createUserProfile = async (formData) => {
   const { data } = await api.post("/users", formData);
   return data;
+};
+/* ========================
+   CART
+======================== */
+
+// 🔹 GET MY CART
+export const fetchCart = async () => {
+  const { data } = await api.get("/carts");
+  return data; // [{ productId, quantity }]
+};
+
+// 🔹 ADD TO CART
+export const addToCart = async (payload) => {
+  await api.post("/carts/add", payload);
+};
+
+// 🔹 UPDATE QUANTITY
+export const updateCartItem = async (productId, quantity) => {
+  await api.put(`/carts/items/${productId}`, { quantity });
+};
+
+// 🔹 REMOVE ITEM
+export const removeCartItem = async (productId) => {
+  await api.delete(`/carts/items/${productId}`);
 };

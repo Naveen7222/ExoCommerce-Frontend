@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
-
+import ChakraLoader from "../components/ui/ChakraLoader";
 
 import axios from "axios";
-
+import { fetchCategories } from "../services/api";
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
@@ -18,26 +18,49 @@ export default function EditProduct() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  const [categories, setCategories] = useState([]);
+
   const [form, setForm] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
+    categoryId: "",
   });
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // 1️⃣ Load product
+  /* ============================
+     LOAD CATEGORIES
+  ============================ */
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  /* ============================
+     LOAD PRODUCT
+  ============================ */
   useEffect(() => {
     const loadProduct = async () => {
       try {
         const { data } = await api.get(`/products/${id}`);
+
         setForm({
           name: data.name,
           description: data.description,
           price: data.price,
           stock: data.stock ?? "",
+          categoryId: data.categoryId ?? "",
         });
 
         if (data.imageBase64) {
@@ -54,7 +77,9 @@ export default function EditProduct() {
     loadProduct();
   }, [id]);
 
-  // 2️⃣ Submit update
+  /* ============================
+     SUBMIT UPDATE
+  ============================ */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -89,7 +114,7 @@ export default function EditProduct() {
   };
 
   if (loading) {
-    return <div className="p-6">Loading product...</div>;
+    return <ChakraLoader manualLoading={true} />;
   }
 
   return (
@@ -115,6 +140,30 @@ export default function EditProduct() {
           required
         />
 
+        {/* CATEGORY */}
+        <div>
+          <label className="block font-medium mb-1">
+            Category
+          </label>
+
+          <select
+            value={form.categoryId}
+            onChange={(e) =>
+              setForm({ ...form, categoryId: e.target.value })
+            }
+            className="w-full border rounded px-3 py-2"
+            required
+          >
+            <option value="">Select Category</option>
+
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <Input
           label="Price"
           type="number"
@@ -134,7 +183,7 @@ export default function EditProduct() {
           }
         />
 
-        {/* Image */}
+        {/* IMAGE */}
         <div>
           <label className="block font-medium mb-1">
             Product Image (optional)

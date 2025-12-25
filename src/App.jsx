@@ -12,6 +12,9 @@ import AddProduct from "./admin/AddProduct";
 import EditProduct from "./admin/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./admin/AdminDashboard";
+import AdminAddCategory from "./admin/AdminAddCategory";
+import Cart from "./pages/Cart";
+
 
 const router = createBrowserRouter(
   [
@@ -24,6 +27,7 @@ const router = createBrowserRouter(
         { path: "/register", element: <Register /> },
         { path: "/products/:id", element: <ProductDetails /> },
         { path: "/test-loader", element: <TestLoader /> },
+        { path: "/cart", element: <Cart /> },
 
         // ===== ADMIN ROUTES =====
         {
@@ -58,6 +62,15 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           ),
         },
+        {
+          path: "/admin/categories/add",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminAddCategory />
+            </ProtectedRoute>
+          ),
+        },
+
         {
           path: "*",
           element: <NotFound />,
