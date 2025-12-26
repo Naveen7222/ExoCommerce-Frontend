@@ -8,20 +8,27 @@ import {
   CardImage,
 } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-import {
-  fetchProducts,
-  fetchCategories,
-  addToCart,
-} from "../services/api";
+import Input from "../components/ui/Input";
+import { fetchProducts, fetchCategories, addToCart } from "../services/api";
 import ChakraLoader from "../components/ui/ChakraLoader";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const filteredProducts = products.filter((product) => {
+    if (!searchQuery) return true;
+
+    return (
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
   /* ========================
      LOAD CATEGORIES
@@ -80,7 +87,7 @@ export default function Home() {
   ======================== */
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen w-full">
+      <div className="flex justify-center items-center h-screen w-full bg-gray-50">
         <div className="w-full max-w-lg">
           <ChakraLoader manualLoading={true} size="md" position="relative" />
         </div>
@@ -90,7 +97,7 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen text-red-500 text-xl">
+      <div className="flex justify-center items-center h-screen text-red-500 text-xl font-medium">
         {error}
       </div>
     );
@@ -100,77 +107,143 @@ export default function Home() {
      MAIN UI
   ======================== */
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-center mb-12 text-neutral-800 tracking-tight">
-        Featured Products
-      </h1>
+    <div className="min-h-screen pb-20">
 
-      {/* CATEGORY FILTER */}
-      <div className="flex justify-center gap-4 mb-10 flex-wrap">
-        <Button
-          onClick={() => setSelectedCategory(null)}
-          className={!selectedCategory ? "bg-primary text-white" : ""}
-        >
-          All
-        </Button>
+      {/* HERO SECTION */}
+      <div className="relative bg-secondary text-white py-20 px-6 sm:px-12 mb-12 overflow-hidden rounded-b-[3rem] shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary via-[#2C3E50] to-black opacity-90"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-10 w-64 h-64 bg-primary opacity-10 rounded-full blur-2xl"></div>
 
-        {categories.map((cat) => (
-          <Button
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.id)}
-            className={
-              selectedCategory === cat.id ? "bg-primary text-white" : ""
-            }
-          >
-            {cat.name}
-          </Button>
-        ))}
+        <div className="relative z-10 container mx-auto text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 animate-fade-in">
+            Discover Premium Quality
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Curated products for the modern lifestyle. Experience the difference with ExoCommerce.
+          </p>
+
+          {/* SEARCH BAR IN HERO */}
+          <div className="max-w-xl mx-auto">
+            <Input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:bg-white/20 focus:ring-primary backdrop-blur-md !rounded-full !py-4"
+              startIcon={
+                <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              }
+            />
+          </div>
+        </div>
       </div>
 
-      {/* PRODUCTS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {products.map((product) => {
-          const imageSrc = product.imageBase64
-            ? `data:image/jpeg;base64,${product.imageBase64}`
-            : "https://placehold.co/600x400?text=No+Image";
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
-          return (
-            <Card
-              key={product.id}
-              className="h-full flex flex-col hover:shadow-lg transition"
+        {/* CATEGORY FILTER */}
+        <div className="flex justify-center flex-wrap gap-3 mb-16">
+          <Button
+            variant={!selectedCategory ? "primary" : "ghost"}
+            onClick={() => setSelectedCategory(null)}
+            className="rounded-full shadow-none"
+          >
+            All Collections
+          </Button>
+
+          {categories.map((cat) => (
+            <Button
+              key={cat.id}
+              variant={selectedCategory === cat.id ? "primary" : "ghost"}
+              onClick={() => setSelectedCategory(cat.id)}
+              className="rounded-full shadow-none"
             >
-              {/* IMAGE + NAME → NAVIGATION */}
-              <Link to={`/products/${product.id}`}>
-                <CardImage
-                  src={imageSrc}
-                  alt={product.name}
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "https://placehold.co/600x400?text=No+Image";
-                  }}
-                />
-                <CardHeader>{product.name}</CardHeader>
-              </Link>
+              {cat.name}
+            </Button>
+          ))}
+        </div>
 
-              <CardBody className="flex-grow">
-                <p className="mb-4">{product.description}</p>
-                <div className="font-bold text-lg text-primary-600">
-                  ${product.price}
-                </div>
-              </CardBody>
+        {/* PRODUCTS GRID */}
+        {filteredProducts.length === 0 ? (
+          <div className="col-span-full text-center py-20 bg-white rounded-3xl shadow-sm border border-dashed border-gray-200">
+            <div className="flex flex-col items-center">
+              <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <p className="text-xl text-gray-500 font-medium">
+                No products found matching "{searchQuery}"
+              </p>
+              <Button
+                variant="ghost"
+                onClick={() => setSearchQuery("")}
+                className="mt-4"
+              >
+                Clear Search
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {filteredProducts.map((product) => {
+              const imageSrc = product.imageBase64
+                ? `data:image/jpeg;base64,${product.imageBase64}`
+                : "https://placehold.co/600x400?text=No+Image";
 
-              {/* ACTION BUTTON */}
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  onClick={() => handleAddToCart(product.id)}
+              return (
+                <Card
+                  key={product.id}
+                  className="h-full flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
                 >
-                  Add to Cart
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
+                  <Link to={`/products/${product.id}`} className="block relative overflow-hidden">
+                    <CardImage
+                      src={imageSrc}
+                      alt={product.name}
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://placehold.co/600x400?text=No+Image";
+                      }}
+                      className="group-hover:scale-110 transition-transform duration-700"
+                    />
+                    {/* Add overlay on hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                  </Link>
+
+                  <div className="flex-grow flex flex-col p-5">
+                    <Link to={`/products/${product.id}`}>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                        {product.name}
+                      </h3>
+                    </Link>
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-3 leading-relaxed">
+                      {product.description}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between">
+                      <span className="text-2xl font-bold text-secondary">
+                        ${product.price}
+                      </span>
+                    </div>
+                  </div>
+
+                  <CardFooter className="p-4 bg-gray-50/50 border-t border-gray-100">
+                    <Button
+                      className="w-full shadow-none hover:shadow-lg"
+                      onClick={() => handleAddToCart(product.id)}
+                      startIcon={
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      }
+                    >
+                      Add to Cart
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,12 +4,12 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 
 const variantClasses = {
-  primary: 'bg-violet-600 text-white hover:bg-violet-700 focus:ring-violet-500',
-  secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-300',
-  danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
-  ghost: 'bg-transparent text-violet-600 hover:bg-violet-50 focus:ring-violet-500',
-  gradient: 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg transform hover:-translate-y-0.5 focus:ring-violet-500',
-  outline: 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-300'
+  primary: 'bg-primary text-white hover:bg-primary-hover focus:ring-primary shadow-lg shadow-primary/30',
+  secondary: 'bg-secondary text-white hover:bg-secondary-hover focus:ring-secondary shadow-lg shadow-secondary/30',
+  danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-lg shadow-red-500/30',
+  ghost: 'bg-transparent text-primary hover:bg-primary/10 focus:ring-primary',
+  gradient: 'bg-gradient-to-r from-primary to-[#FFB088] text-white hover:shadow-xl hover:shadow-primary/40 transform hover:-translate-y-0.5 focus:ring-primary',
+  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary'
 };
 
 const sizeClasses = {

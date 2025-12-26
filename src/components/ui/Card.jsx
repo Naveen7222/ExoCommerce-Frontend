@@ -6,7 +6,7 @@ export function Card({ children, className }) {
   return (
     <div
       className={clsx(
-        "bg-white rounded-xl shadow-md border border-neutral-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1",
+        "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gray-200/50 hover:-translate-y-1 group",
         className
       )}
     >

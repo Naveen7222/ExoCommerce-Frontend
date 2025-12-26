@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Livvic:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap');
+
+@theme {
+  --color-primary: #FF8C42;
+  --color-primary-hover: #E87A30;
+  --color-secondary: #334155;
+  --color-secondary-hover: #1E293B;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text-main: #1E293B;
+  --color-text-muted: #64748B;
+  
+  --font-family-sans: "Livvic", sans-serif;
+}
+
+:root {
+  font-family: "Livvic", sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
