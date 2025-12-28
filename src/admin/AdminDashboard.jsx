@@ -13,7 +13,7 @@ export default function AdminDashboard() {
 
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
+
         {/* Manage Products */}
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-semibold mb-2">
@@ -44,18 +44,36 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
-        {/* Placeholder for future */}
-        <div className="bg-white rounded-xl shadow p-6 opacity-60">
+        {/* Manage Categories */}
+        <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-semibold mb-2">
-            Orders
+            Categories
           </h2>
           <p className="text-gray-600 mb-4">
-            Coming soon
+            View, edit or delete categories
           </p>
-          <Button className="w-full" disabled>
-            Manage Orders
-          </Button>
+          <Link to="/admin/categories">
+            <Button className="w-full">
+              Manage Categories
+            </Button>
+          </Link>
         </div>
+
+        {/* Add Category */}
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-semibold mb-2">
+            Add Category
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Add a new product category
+          </p>
+          <Link to="/admin/categories/add">
+            <Button className="w-full" variant="outline">
+              Add New Category
+            </Button>
+          </Link>
+        </div>
+
 
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
 
 export default function TestLoader() {
     const [isTestLoading, setIsTestLoading] = useState(false);
@@ -23,7 +23,7 @@ export default function TestLoader() {
 
             <div className="mt-10 p-4 border border-dashed rounded text-gray-500 w-full max-w-lg relative  min-h-[100px] flex items-center justify-center">
                 {/* Pass manualLoading prop so we can force it to show, plus new props */}
-                <ChakraLoader manualLoading={isTestLoading} position="absolute" size="sm" />
+                <Loading manualLoading={isTestLoading} position="absolute" size="sm" />
                 <p className="text-sm">Loader will appear inside this box, running LTR.</p>
             </div>
         </div>

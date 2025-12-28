@@ -7,9 +7,11 @@ import {
 } from "../services/api";
 
 import { Button } from "../components/ui/Button";
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
+import { useModal } from "../context/ModalContext";
 
 export default function AdminProducts() {
+  const { showModal } = useModal();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -49,24 +51,26 @@ export default function AdminProducts() {
   }, []);
 
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
-
-    if (!confirmed) return;
-
-    try {
-      await deleteProduct(id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Delete failed");
-    }
+  const handleDelete = (id) => {
+    showModal({
+      title: "Delete Product",
+      message: "Are you sure you want to delete this product? This acton cannot be undone.",
+      type: "confirm",
+      onConfirm: async () => {
+        try {
+          await deleteProduct(id);
+          setProducts((prev) => prev.filter((p) => p.id !== id));
+          showModal({ title: "Deleted", message: "Product has been deleted.", type: "success" });
+        } catch (err) {
+          console.error(err);
+          showModal({ title: "Error", message: "Failed to delete product.", type: "error" });
+        }
+      }
+    });
   };
 
   if (loading) {
-    return <ChakraLoader manualLoading={true} />;
+    return <Loading manualLoading={true} />;
   }
 
   if (error) {

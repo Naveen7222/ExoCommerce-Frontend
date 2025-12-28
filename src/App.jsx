@@ -13,6 +13,7 @@ import EditProduct from "./admin/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminAddCategory from "./admin/AdminAddCategory";
+import AdminCategories from "./admin/AdminCategories";
 import Cart from "./pages/Cart";
 
 
@@ -63,6 +64,14 @@ const router = createBrowserRouter(
           ),
         },
         {
+          path: "/admin/categories",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminCategories />
+            </ProtectedRoute>
+          ),
+        },
+        {
           path: "/admin/categories/add",
           element: (
             <ProtectedRoute allowedRoles={["ADMIN"]}>
@@ -83,6 +92,15 @@ const router = createBrowserRouter(
   }
 );
 
+import { ModalProvider } from "./context/ModalContext";
+import { CartProvider } from "./context/CartContext";
+
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ModalProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </ModalProvider>
+  );
 }

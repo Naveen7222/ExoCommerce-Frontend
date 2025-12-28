@@ -10,9 +10,13 @@ import {
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { fetchProducts, fetchCategories, addToCart } from "../services/api";
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
+import { useCart } from "../context/CartContext";
+import { useModal } from "../context/ModalContext";
 
 export default function Home() {
+  const { refreshCart } = useCart();
+  const { showModal } = useModal();
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
@@ -20,6 +24,7 @@ export default function Home() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(null); // Track which product is being added
 
   const filteredProducts = products.filter((product) => {
     if (!searchQuery) return true;
@@ -69,7 +74,11 @@ export default function Home() {
   /* ========================
      ADD TO CART HANDLER
   ======================== */
-  const handleAddToCart = async (productId) => {
+  const handleAddToCart = async (productId, productName) => {
+    // Prevent multiple simultaneous add to cart operations
+    if (addingToCart) return;
+
+    setAddingToCart(productId);
     try {
       await addToCart({
         productId,
@@ -77,8 +86,33 @@ export default function Home() {
       });
 
       console.log("Added to cart:", productId);
+
+      // Show success modal immediately after successful add
+      showModal({
+        title: "Success!",
+        message: `${productName} has been added to your cart.`,
+        type: "success"
+      });
+
+      // Try to refresh cart to update the badge count
+      // If this fails, we don't want to show an error since the add succeeded
+      try {
+        await refreshCart();
+      } catch (refreshError) {
+        console.error("Failed to refresh cart, but item was added successfully:", refreshError);
+        // Silently fail - the item was added successfully
+      }
     } catch (err) {
       console.error("Add to cart failed", err);
+
+      // Show error modal only if the add to cart itself failed
+      showModal({
+        title: "Error",
+        message: err.response?.data?.message || "Failed to add item to cart. Please try again.",
+        type: "error"
+      });
+    } finally {
+      setAddingToCart(null);
     }
   };
 
@@ -89,7 +123,7 @@ export default function Home() {
     return (
       <div className="flex justify-center items-center h-screen w-full bg-gray-50">
         <div className="w-full max-w-lg">
-          <ChakraLoader manualLoading={true} size="md" position="relative" />
+          <Loading manualLoading={true} size="md" position="relative" />
         </div>
       </div>
     );
@@ -173,7 +207,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <p className="text-xl text-gray-500 font-medium">
-                No products found matching "{searchQuery}"
+                No products found matching &quot;{searchQuery}&quot;
               </p>
               <Button
                 variant="ghost"
@@ -229,14 +263,22 @@ export default function Home() {
                   <CardFooter className="p-4 bg-gray-50/50 border-t border-gray-100">
                     <Button
                       className="w-full shadow-none hover:shadow-lg"
-                      onClick={() => handleAddToCart(product.id)}
+                      onClick={() => handleAddToCart(product.id, product.name)}
+                      disabled={addingToCart === product.id}
                       startIcon={
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
+                        addingToCart === product.id ? (
+                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                        )
                       }
                     >
-                      Add to Cart
+                      {addingToCart === product.id ? "Adding..." : "Add to Cart"}
                     </Button>
                   </CardFooter>
                 </Card>

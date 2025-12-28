@@ -5,8 +5,10 @@ import { Button } from "../components/ui/Button";
 
 import Input from "../components/ui/Input";
 import { fetchCategories } from "../services/api";
+import { useModal } from "../context/ModalContext";
 
 export default function AddProduct() {
+    const { showModal } = useModal();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: "",
@@ -45,7 +47,11 @@ export default function AddProduct() {
         const file = e.target.files[0];
         if (file) {
             if (file.size > 2 * 1024 * 1024) { // 2MB limit
-                alert("File size exceeds 2MB limit. Please choose a smaller image.");
+                showModal({
+                    title: "File Too Large",
+                    message: "File size exceeds 2MB limit. Please choose a smaller image.",
+                    type: "warning"
+                });
                 e.target.value = null; // Reset input
                 setImageFile(null);
                 setPreviewUrl(null);

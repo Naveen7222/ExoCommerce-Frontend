@@ -2,14 +2,19 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/Button";
-
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
+import { addToCart } from "../services/api";
+import { useCart } from "../context/CartContext";
+import { useModal } from "../context/ModalContext";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { refreshCart } = useCart();
+  const { showModal } = useModal();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,8 +32,47 @@ export default function ProductDetails() {
     fetchProduct();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    if (addingToCart) return;
+
+    setAddingToCart(true);
+    try {
+      await addToCart({
+        productId: product.id,
+        quantity: 1,
+      });
+
+      // Show success modal immediately after successful add
+      showModal({
+        title: "Success!",
+        message: `${product.name} has been added to your cart.`,
+        type: "success"
+      });
+
+      // Try to refresh cart to update the badge count
+      // If this fails, we don't want to show an error since the add succeeded
+      try {
+        await refreshCart();
+      } catch (refreshError) {
+        console.error("Failed to refresh cart, but item was added successfully:", refreshError);
+        // Silently fail - the item was added successfully
+      }
+    } catch (err) {
+      console.error("Add to cart failed", err);
+
+      // Show error modal only if the add to cart itself failed
+      showModal({
+        title: "Error",
+        message: err.response?.data?.message || "Failed to add item to cart. Please try again.",
+        type: "error"
+      });
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
   if (loading) {
-    return <ChakraLoader manualLoading={true} />;
+    return <Loading manualLoading={true} />;
   }
 
   if (error) {
@@ -66,7 +110,13 @@ export default function ProductDetails() {
           </p>
 
           {/* Add to Cart Button */}
-          <Button className="mt-6 w-full max-w-xs">Add to Cart</Button>
+          <Button
+            className="mt-6 w-full max-w-xs"
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+          >
+            {addingToCart ? "Adding..." : "Add to Cart"}
+          </Button>
         </div>
       </div>
     </div>

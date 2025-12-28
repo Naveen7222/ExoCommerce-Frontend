@@ -11,6 +11,7 @@ const api = axios.create({
 /* ========================
    REQUEST INTERCEPTOR
 ======================== */
+
 api.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -23,6 +24,7 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
 
 /* ========================
    RESPONSE INTERCEPTOR
@@ -87,6 +89,15 @@ export const addCategory = async (payload) => {
   return data;
 };
 
+export const updateCategory = async (id, payload) => {
+  const { data } = await api.put(`/categories/${id}`, payload);
+  return data;
+};
+
+export const deleteCategory = async (id) => {
+  await api.delete(`/categories/${id}`);
+};
+
 
 /* ========================
    AUTH
@@ -122,13 +133,38 @@ export const createUserProfile = async (formData) => {
 
 // 🔹 GET MY CART
 export const fetchCart = async () => {
-  const { data } = await api.get("/carts");
-  return data; // [{ productId, quantity }]
+  try {
+    const { data } = await api.get("/carts");
+    console.log("Fetch cart success - Full data:", data);
+    console.log("Fetch cart success - Data type:", typeof data);
+    console.log("Fetch cart success - Is array:", Array.isArray(data));
+    console.log("Fetch cart success - Length:", data?.length);
+    if (data && data.length > 0) {
+      console.log("Fetch cart success - First item:", data[0]);
+      console.log("Fetch cart success - First item keys:", Object.keys(data[0]));
+    }
+    return data; // [{ productId, quantity }]
+  } catch (error) {
+    console.error("Fetch cart failed - Status:", error.response?.status);
+    console.error("Fetch cart failed - Error data:", error.response?.data);
+    throw error;
+  }
 };
 
 // 🔹 ADD TO CART
 export const addToCart = async (payload) => {
-  await api.post("/carts/add", payload);
+  try {
+    console.log("Adding to cart with payload:", payload);
+    const response = await api.post("/carts/add", payload);
+    console.log("Add to cart SUCCESS - Response:", response.data);
+    console.log("Add to cart SUCCESS - Status:", response.status);
+    return response.data;
+  } catch (error) {
+    console.error("Add to cart FAILED - Status:", error.response?.status);
+    console.error("Add to cart FAILED - Error data:", error.response?.data);
+    console.error("Add to cart FAILED - Full error:", error);
+    throw error;
+  }
 };
 
 // 🔹 UPDATE QUANTITY

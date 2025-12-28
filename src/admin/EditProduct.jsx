@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
 
 import axios from "axios";
 import { fetchCategories } from "../services/api";
@@ -11,7 +11,10 @@ const api = axios.create({
   baseURL: "http://localhost:8080",
 });
 
+import { useModal } from "../context/ModalContext";
+
 export default function EditProduct() {
+  const { showModal } = useModal();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -68,14 +71,15 @@ export default function EditProduct() {
         }
       } catch (err) {
         console.error(err);
-        alert("Failed to load product");
+        console.error(err);
+        showModal({ title: "Error", message: "Failed to load product details", type: "error" });
       } finally {
         setLoading(false);
       }
     };
 
     loadProduct();
-  }, [id]);
+  }, [id, showModal]);
 
   /* ============================
      SUBMIT UPDATE
@@ -107,14 +111,15 @@ export default function EditProduct() {
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
-      alert("Update failed");
+      console.error(err);
+      showModal({ title: "Error", message: "Update failed. Please try again.", type: "error" });
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <ChakraLoader manualLoading={true} />;
+    return <Loading manualLoading={true} />;
   }
 
   return (

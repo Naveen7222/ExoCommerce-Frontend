@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
-import ChakraLoader from "../components/ui/ChakraLoader";
+import Loading from "../components/ui/Loading";
 import { addCategory } from "../services/api";
 
 export default function AdminAddCategory() {
@@ -40,7 +40,7 @@ export default function AdminAddCategory() {
   };
 
   if (loading) {
-    return <ChakraLoader manualLoading={true} />;
+    return <Loading manualLoading={true} />;
   }
 
   return (

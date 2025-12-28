@@ -1,7 +1,7 @@
 import { useNavigation } from "react-router";
 import clsx from "clsx";
 
-export default function ChakraLoader({
+export default function Loading({
   manualLoading = false,
   position = "fixed",
   size = "md",

@@ -24,6 +24,11 @@ export const getRole = () => {
   return user?.role || null;
 };
 
+export const getUserId = () => {
+  const user = getUserFromToken();
+  return user?.id || null;
+};
+
 export const logout = () => {
   localStorage.removeItem("token");
 };
