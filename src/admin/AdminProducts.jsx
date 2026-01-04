@@ -84,15 +84,16 @@ export default function AdminProducts() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-2xl font-bold text-white">
           Manage Products
         </h1>
 
         <div className="flex gap-3 mb-6 flex-wrap">
           <Button
             size="sm"
-            variant={!selectedCategory ? "default" : "outline"}
+            variant={!selectedCategory ? "primary" : "outline"}
             onClick={() => setSelectedCategory(null)}
+            className={!selectedCategory ? "" : "border-white/10 text-slate-300 hover:text-white hover:bg-white/10"}
           >
             All
           </Button>
@@ -101,8 +102,9 @@ export default function AdminProducts() {
             <Button
               key={cat.id}
               size="sm"
-              variant={selectedCategory === cat.id ? "default" : "outline"}
+              variant={selectedCategory === cat.id ? "primary" : "outline"}
               onClick={() => setSelectedCategory(cat.id)}
+              className={selectedCategory === cat.id ? "" : "border-white/10 text-slate-300 hover:text-white hover:bg-white/10"}
             >
               {cat.name}
             </Button>
@@ -111,23 +113,23 @@ export default function AdminProducts() {
 
 
         <Link to="/admin/products/add">
-          <Button>Add Product</Button>
+          <Button className="shadow-lg shadow-primary/20">Add Product</Button>
         </Link>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <table className="min-w-full border border-gray-200">
-          <thead className="bg-gray-100">
-            <tr className="text-left text-sm font-semibold text-gray-700">
-              <th className="p-3">Image</th>
-              <th className="p-3">Name</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Price</th>
-              <th className="p-3 text-right">Actions</th>
+      <div className="overflow-x-auto bg-[#1E293B]/70 backdrop-blur-md rounded-xl shadow-2xl border border-white/5">
+        <table className="min-w-full text-left">
+          <thead className="bg-white/5 border-b border-white/10">
+            <tr className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
+              <th className="p-4">Image</th>
+              <th className="p-4">Name</th>
+              <th className="p-4">Category</th>
+              <th className="p-4">Price</th>
+              <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody className="divide-y divide-white/5">
             {products.map((product) => {
               const imageSrc = product.imageBase64
                 ? `data:image/jpeg;base64,${product.imageBase64}`
@@ -136,38 +138,39 @@ export default function AdminProducts() {
               return (
                 <tr
                   key={product.id}
-                  className="border-t text-sm hover:bg-gray-50"
+                  className="hover:bg-white/5 transition-colors duration-200"
                 >
-                  <td className="p-3">
+                  <td className="p-4">
                     <img
                       src={imageSrc}
                       alt={product.name}
-                      className="w-20 h-14 object-cover rounded border"
+                      className="w-16 h-12 object-cover rounded-lg border border-white/10"
                     />
                   </td>
 
-                  <td className="p-3 font-medium text-gray-800">
+                  <td className="p-4 font-bold text-white">
                     {product.name}
                   </td>
 
-                  <td className="p-3 text-gray-700">
+                  <td className="p-4 text-slate-400">
                     {product.categoryName || "—"}
                   </td>
 
-                  <td className="p-3 text-gray-700">
+                  <td className="p-4 text-primary font-bold">
                     ${product.price}
                   </td>
 
-                  <td className="p-3 text-right space-x-2">
+                  <td className="p-4 text-right space-x-2">
                     <Link to={`/admin/products/edit/${product.id}`}>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
                         Edit
                       </Button>
                     </Link>
 
                     <Button
                       size="sm"
-                      variant="destructive"
+                      variant="danger"
+                      className="bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/20"
                       onClick={() => handleDelete(product.id)}
                     >
                       Delete
@@ -180,8 +183,8 @@ export default function AdminProducts() {
         </table>
 
         {products.length === 0 && (
-          <div className="p-6 text-center text-gray-500">
-            No products found.
+          <div className="p-12 text-center text-slate-500">
+            No products found for this category.
           </div>
         )}
       </div>

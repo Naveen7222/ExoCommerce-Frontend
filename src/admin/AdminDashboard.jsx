@@ -4,10 +4,10 @@ import { Button } from "../components/ui/Button";
 export default function AdminDashboard() {
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">
+      <h1 className="text-3xl font-bold text-white mb-2">
         Admin Dashboard
       </h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-slate-400 mb-8">
         Manage your store from here
       </p>
 
@@ -15,60 +15,72 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* Manage Products */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-xl font-semibold mb-2">
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
             Products
           </h2>
-          <p className="text-gray-600 mb-4">
-            View, edit or delete products
+          <p className="text-slate-400 mb-6 text-sm">
+            View, edit or delete products from your inventory.
           </p>
           <Link to="/admin/products">
-            <Button className="w-full">
+            <Button className="w-full shadow-lg shadow-primary/20">
               Manage Products
             </Button>
           </Link>
         </div>
 
         {/* Add Product */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-xl font-semibold mb-2">
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
             Add Product
           </h2>
-          <p className="text-gray-600 mb-4">
-            Add a new product to your store
+          <p className="text-slate-400 mb-6 text-sm">
+            Add a new product to your store catalog.
           </p>
           <Link to="/admin/products/add">
-            <Button className="w-full" variant="outline">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
               Add New Product
             </Button>
           </Link>
         </div>
 
         {/* Manage Categories */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-xl font-semibold mb-2">
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
             Categories
           </h2>
-          <p className="text-gray-600 mb-4">
-            View, edit or delete categories
+          <p className="text-slate-400 mb-6 text-sm">
+            View, edit or delete product categories.
           </p>
           <Link to="/admin/categories">
-            <Button className="w-full">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
               Manage Categories
             </Button>
           </Link>
         </div>
 
         {/* Add Category */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-xl font-semibold mb-2">
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
             Add Category
           </h2>
-          <p className="text-gray-600 mb-4">
-            Add a new product category
+          <p className="text-slate-400 mb-6 text-sm">
+            Add a new product category to organize items.
           </p>
           <Link to="/admin/categories/add">
-            <Button className="w-full" variant="outline">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
               Add New Category
             </Button>
           </Link>

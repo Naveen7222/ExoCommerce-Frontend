@@ -8,6 +8,10 @@ export const getToken = () => {
   return localStorage.getItem("token");
 };
 
+export const setUserId = (userId) => {
+  localStorage.setItem("userId", userId);
+};
+
 export const getUserFromToken = () => {
   const token = getToken();
   if (!token) return null;
@@ -31,4 +35,5 @@ export const getUserId = () => {
 
 export const logout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("userId");
 };

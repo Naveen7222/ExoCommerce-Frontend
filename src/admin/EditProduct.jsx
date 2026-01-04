@@ -123,112 +123,133 @@ export default function EditProduct() {
   }
 
   return (
-    <div className="max-w-3xl p-6">
-      <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-white">Edit Product</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <Input
-          label="Product Name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
-          required
-        />
-
-        <Input
-          label="Description"
-          value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
-          required
-        />
-
-        {/* CATEGORY */}
-        <div>
-          <label className="block font-medium mb-1">
-            Category
-          </label>
-
-          <select
-            value={form.categoryId}
+      <div className="bg-[#1E293B]/70 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/5">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Product Name"
+            value={form.name}
             onChange={(e) =>
-              setForm({ ...form, categoryId: e.target.value })
+              setForm({ ...form, name: e.target.value })
             }
-            className="w-full border rounded px-3 py-2"
             required
-          >
-            <option value="">Select Category</option>
-
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <Input
-          label="Price"
-          type="number"
-          value={form.price}
-          onChange={(e) =>
-            setForm({ ...form, price: e.target.value })
-          }
-          required
-        />
-
-        <Input
-          label="Stock"
-          type="number"
-          value={form.stock}
-          onChange={(e) =>
-            setForm({ ...form, stock: e.target.value })
-          }
-        />
-
-        {/* IMAGE */}
-        <div>
-          <label className="block font-medium mb-1">
-            Product Image (optional)
-          </label>
-
-          {preview && (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-40 h-28 object-cover mb-2 border rounded"
-            />
-          )}
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              setImage(file);
-              if (file) {
-                setPreview(URL.createObjectURL(file));
-              }
-            }}
           />
-        </div>
 
-        <div className="flex gap-3">
-          <Button type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Update Product"}
-          </Button>
+          <Input
+            label="Description"
+            value={form.description}
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
+            required
+            multiline
+            rows={3}
+          />
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/admin/products")}
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
+          {/* CATEGORY */}
+          <div>
+            <label className="block font-medium mb-2 text-slate-300">
+              Category
+            </label>
+
+            <div className="relative">
+              <select
+                value={form.categoryId}
+                onChange={(e) =>
+                  setForm({ ...form, categoryId: e.target.value })
+                }
+                className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition duration-200 outline-none appearance-none hover:bg-white/10"
+                required
+              >
+                <option value="" className="bg-slate-800 text-slate-400">Select Category</option>
+
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id} className="bg-slate-800 text-white">
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <Input
+              label="Price"
+              type="number"
+              value={form.price}
+              onChange={(e) =>
+                setForm({ ...form, price: e.target.value })
+              }
+              required
+            />
+
+            <Input
+              label="Stock"
+              type="number"
+              value={form.stock}
+              onChange={(e) =>
+                setForm({ ...form, stock: e.target.value })
+              }
+            />
+          </div>
+
+          {/* IMAGE */}
+          <div>
+            <label className="block font-medium mb-2 text-slate-300">
+              Product Image (optional)
+            </label>
+
+            {preview && (
+              <img
+                src={preview}
+                alt="preview"
+                className="w-40 h-28 object-cover mb-4 border border-white/10 rounded-lg shadow-md"
+              />
+            )}
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setImage(file);
+                if (file) {
+                  setPreview(URL.createObjectURL(file));
+                }
+              }}
+              className="block w-full text-sm text-slate-400
+                  file:mr-4 file:py-2.5 file:px-6
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-bold
+                  file:bg-primary file:text-white
+                  hover:file:bg-primary-hover
+                  file:transition-colors
+                  cursor-pointer
+                  bg-white/5 rounded-xl border border-white/10"
+            />
+          </div>
+
+          <div className="flex gap-4 pt-4">
+            <Button type="submit" disabled={saving} className="flex-1 shadow-lg shadow-primary/25">
+              {saving ? "Saving..." : "Update Product"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/admin/products")}
+              className="flex-1 border-white/10 text-white hover:bg-white/10"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

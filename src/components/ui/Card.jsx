@@ -6,10 +6,12 @@ export function Card({ children, className }) {
   return (
     <div
       className={clsx(
-        "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gray-200/50 hover:-translate-y-1 group",
+        "bg-[#1E293B]/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/5 overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.2)] hover:border-primary/30 hover:-translate-y-2 group relative z-0",
         className
       )}
     >
+      {/* Subtle background glow effect on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
       {children}
     </div>
   );
@@ -20,7 +22,7 @@ export function CardHeader({ children, className }) {
   return (
     <div
       className={clsx(
-        "p-4 border-b border-neutral-100 font-semibold text-neutral-900 text-lg",
+        "p-5 border-b border-white/5 font-bold text-white text-lg",
         className
       )}
     >
@@ -30,13 +32,15 @@ export function CardHeader({ children, className }) {
 }
 
 // ---------- Card Image ----------
-export function CardImage({ src, alt, className }) {
+export function CardImage({ src, alt, className, ...props }) {
   return (
-    <div className={clsx("w-full h-48 overflow-hidden bg-neutral-100", className)}>
+    <div className={clsx("w-full h-64 overflow-hidden bg-slate-800 relative", className)}>
+      {/* Skeleton placeholder behind image? For now just bg color */}
       <img
         src={src}
         alt={alt || "Card Image"}
-        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+        className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+        {...props}
       />
     </div>
   );
@@ -45,7 +49,7 @@ export function CardImage({ src, alt, className }) {
 // ---------- Card Body ----------
 export function CardBody({ children, className }) {
   return (
-    <div className={clsx("p-4 text-neutral-600 text-sm leading-relaxed", className)}>
+    <div className={clsx("p-5 text-slate-400 text-sm leading-relaxed", className)}>
       {children}
     </div>
   );
@@ -56,7 +60,7 @@ export function CardFooter({ children, className }) {
   return (
     <div
       className={clsx(
-        "p-4 border-t border-neutral-100 bg-neutral-50 flex justify-end gap-2",
+        "p-5 border-t border-white/5 bg-black/20 backdrop-blur-sm flex justify-end gap-2",
         className
       )}
     >

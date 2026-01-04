@@ -122,11 +122,50 @@ export const loginUser = async (credentials) => {
    USER PROFILE
 ======================== */
 
-// 3️⃣ CREATE USER PROFILE (IMAGE OPTIONAL)
+// 🔹 CREATE USER PROFILE (IMAGE OPTIONAL)
 export const createUserProfile = async (formData) => {
   const { data } = await api.post("/users", formData);
   return data;
 };
+
+// 🔹 GET MY PROFILE (BY ID)
+export const fetchUserProfileById = async (userId) => {
+  try {
+    console.log(`[API] Fetching user profile for userId: ${userId}`);
+    const response = await api.get(`/users/${userId}`);
+    console.log(`[API] User profile fetch SUCCESS:`, response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`[API] User profile fetch FAILED for userId ${userId}`);
+    console.error(`[API] Error status:`, error.response?.status);
+    console.error(`[API] Error data:`, error.response?.data);
+    console.error(`[API] Full error:`, error.message);
+    throw error;
+  }
+};
+
+// 🔹 UPDATE USER PROFILE (DATA + OPTIONAL IMAGE)
+export const updateUserProfile = async (userId, { name, phone, address }, imageFile) => {
+  const formData = new FormData();
+
+  formData.append(
+    "user",
+    JSON.stringify({
+      name,
+      phone,
+      address,
+    })
+  );
+
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
+
+  const { data } = await api.put(`/users/${userId}`, formData);
+  return data;
+};
+
+
 /* ========================
    CART
 ======================== */
@@ -175,4 +214,18 @@ export const updateCartItem = async (productId, quantity) => {
 // 🔹 REMOVE ITEM
 export const removeCartItem = async (productId) => {
   await api.delete(`/carts/items/${productId}`);
+};
+
+// ========================
+// ORDERS
+// ========================
+
+export const placeOrder = async () => {
+  const { data } = await api.post("/orders");
+  return data;
+};
+
+export const fetchMyOrders = async () => {
+  const { data } = await api.get("/orders/my");
+  return data;
 };

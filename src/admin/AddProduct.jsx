@@ -106,11 +106,11 @@ export default function AddProduct() {
 
     return (
         <div className="container mx-auto p-4 max-w-2xl">
-            <h1 className="text-3xl font-bold mb-8 text-center text-neutral-800">Add New Product</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center text-white">Add New Product</h1>
 
-            <div className="bg-white rounded-2xl shadow-xl p-8 border border-neutral-100">
+            <div className="bg-[#1E293B]/70 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/5">
                 {error && (
-                    <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-100">
+                    <div className="mb-6 p-4 bg-red-500/10 text-red-200 rounded-lg border border-red-500/20">
                         {error}
                     </div>
                 )}
@@ -159,52 +159,62 @@ export default function AddProduct() {
                         />
 
                         <div className="flex flex-col mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-slate-300 mb-2">
                                 Category
                             </label>
-                            <select
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition duration-200 outline-none"
-                                required
-                            >
-                                <option value="" disabled>Select a category</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
-                                        {cat.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition duration-200 outline-none appearance-none hover:bg-white/10"
+                                    required
+                                >
+                                    <option value="" disabled className="bg-slate-800 text-slate-400">Select a category</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id} className="bg-slate-800 text-white">
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div className="flex flex-col mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
                             Product Image
                         </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="block w-full text-sm text-gray-500
-                 file:mr-4 file:py-2 file:px-4
-                 file:rounded-full file:border-0
-                 file:text-sm file:font-semibold
-                 file:bg-violet-50 file:text-violet-700
-                 hover:file:bg-violet-100
-               "
-                        />
+                        <div className="relative group">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="block w-full text-sm text-slate-400
+                                file:mr-4 file:py-2.5 file:px-6
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-bold
+                                file:bg-primary file:text-white
+                                hover:file:bg-primary-hover
+                                file:transition-colors
+                                cursor-pointer
+                                bg-white/5 rounded-xl border border-white/10
+                                "
+                            />
+                        </div>
                     </div>
 
                     {previewUrl && (
                         <div className="mt-4">
-                            <p className="text-sm text-gray-500 mb-2">Preview:</p>
-                            <div className="w-full h-48 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                            <p className="text-sm text-slate-400 mb-2">Preview:</p>
+                            <div className="w-full h-48 rounded-xl overflow-hidden bg-white/5 border border-white/10 relative group">
                                 <img
                                     src={previewUrl}
                                     alt="Preview"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                             </div>
                         </div>
@@ -213,9 +223,9 @@ export default function AddProduct() {
                     <div className="pt-4">
                         <Button
                             type="submit"
-                            className="w-full py-3 text-lg"
+                            className="w-full py-4 text-lg shadow-xl shadow-primary/25"
                             disabled={loading}
-                            variant="gradient"
+                            variant="primary" // Changed from gradient to primary for consistency
                         >
                             {loading ? "Adding Product..." : "Add Product"}
                         </Button>

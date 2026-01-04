@@ -1,16 +1,17 @@
-// src/pages/Register.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { registerAuthUser, createUserProfile } from "../services/api";
-import Toast from "../components/ui/Toast";
+import { useToast } from "../components/ui/Toast";
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
 export default function Register() {
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -20,16 +21,6 @@ export default function Register() {
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [toast, setToast] = useState({ message: "", type: "success" });
-
-  const showToast = (message, type) => {
-    setToast({ message, type });
-  };
-
-  const closeToast = () => {
-    setToast({ message: "", type: "success" });
-  };
 
   useEffect(() => {
     return () => {
@@ -42,12 +33,12 @@ export default function Register() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      showToast("Only image files are allowed", "error");
+      addToast("Only image files are allowed", "error");
       return;
     }
 
     if (file.size > MAX_IMAGE_SIZE) {
-      showToast("Image must be smaller than 2MB", "error");
+      addToast("Image must be smaller than 2MB", "error");
       return;
     }
 
@@ -60,22 +51,20 @@ export default function Register() {
     setLoading(true);
 
     try {
+      // 1️⃣ Register auth user
       const { authUserId } = await registerAuthUser({ email, password });
 
+      // 2️⃣ Create user profile (multipart)
       const formData = new FormData();
       formData.append(
         "user",
-        new Blob(
-          [
-            JSON.stringify({
-              authUserId,
-              email,
-              phone,
-              address,
-            }),
-          ],
-          { type: "application/json" }
-        )
+        JSON.stringify({
+          authUserId,
+          name,
+          email,
+          phone,
+          address,
+        })
       );
 
       if (profileImg) {
@@ -84,65 +73,119 @@ export default function Register() {
 
       await createUserProfile(formData);
 
-      showToast("Account created successfully! Redirecting to login...", "success");
+      addToast(
+        "Account created successfully! Redirecting to login...",
+        "success"
+      );
+
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       console.error(err);
-      showToast("Registration failed. Please try again.", "error");
+      addToast("Registration failed. Please try again.", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-700 to-indigo-800 py-10">
-      <Toast message={toast.message} type={toast.type} onClose={closeToast} />
-
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-900 py-10">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-primary opacity-10 rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600 opacity-5 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-lg mx-4">
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
-          <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
+        <div className="bg-[#1E293B]/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/5">
+          <h1 className="text-3xl font-extrabold text-center mb-8 text-white">
             Create an Account
           </h1>
 
-          <form onSubmit={handleRegister} className="space-y-4">
-            {/* IMAGE */}
+          <form onSubmit={handleRegister} className="space-y-5">
+            {/* PROFILE IMAGE */}
             <div className="flex justify-center">
-              <label className="cursor-pointer">
-                <div className="w-28 h-28 rounded-full overflow-hidden border flex items-center justify-center bg-gray-50">
+              <label className="cursor-pointer group">
+                <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-white/10 flex items-center justify-center bg-white/5 group-hover:border-primary transition-colors">
                   {previewUrl ? (
-                    <img src={previewUrl} alt="preview" className="w-full h-full object-cover" />
+                    <img
+                      src={previewUrl}
+                      alt="preview"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <span className="text-gray-400 text-sm">Upload</span>
+                    <span className="text-slate-400 text-sm group-hover:text-primary transition-colors">Upload</span>
                   )}
                 </div>
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
               </label>
             </div>
 
-            <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
+              labelClassName="text-slate-300"
+            />
+
+            <Input
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
+              labelClassName="text-slate-300"
+            />
+
             <Input
               label="Password"
-              type={showPassword ? "text" : "password"}
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
+              labelClassName="text-slate-300"
             />
-            <Input label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-            <Input label="Address" multiline rows={3} value={address} onChange={(e) => setAddress(e.target.value)} required />
 
-            <Button type="submit" variant="gradient" className="w-full" loading={loading}>
+            <Input
+              label="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
+              labelClassName="text-slate-300"
+            />
+
+            <Input
+              label="Address"
+              multiline
+              rows={3}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
+              labelClassName="text-slate-300"
+            />
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full py-4 text-lg font-bold shadow-lg shadow-primary/25"
+              loading={loading}
+            >
               {loading ? "Creating..." : "Create Account"}
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-8 text-center text-sm text-slate-400">
             Already have an account?{" "}
-            <Link to="/login" className="text-violet-600 font-semibold">
+            <Link to="/login" className="font-bold text-primary hover:text-orange-400 transition-colors">
               Login
             </Link>
           </p>

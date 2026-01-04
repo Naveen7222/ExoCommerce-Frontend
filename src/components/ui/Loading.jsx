@@ -1,5 +1,6 @@
 import { useNavigation } from "react-router";
 import clsx from "clsx";
+import narutoRunImg from "../../assets/naruto-run.gif";
 
 export default function Loading({
   manualLoading = false,
@@ -62,7 +63,7 @@ export default function Loading({
         {/* Naruto Runner */}
         <div className="relative z-10 transform-gpu transition-all duration-500">
           <img
-            src="/exocommerce/naruto-run.gif"
+            src={narutoRunImg}
             alt="Loading..."
             className={clsx(
               "relative z-20 w-auto object-contain drop-shadow-[0_0_20px_rgba(249,115,22,0.8)] filter brightness-125 saturate-150",

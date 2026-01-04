@@ -4,20 +4,22 @@ export default function Input({
   label,
   type = "text",
   className,
+  wrapperClassName,
   startIcon,
   endIcon,
   error,
   fullWidth = true,
   multiline = false,
   rows = 3,
+  labelClassName,
   ...props
 }) {
   const Component = multiline ? "textarea" : "input";
 
   return (
-    <div className={clsx("flex flex-col mb-4", fullWidth && "w-full")}>
+    <div className={clsx("flex flex-col mb-4", fullWidth && "w-full", wrapperClassName)}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className={clsx("block text-sm font-medium mb-2", labelClassName || "text-slate-300")}>
           {label}
         </label>
       )}
@@ -35,7 +37,7 @@ export default function Input({
           type={!multiline ? type : undefined}
           rows={multiline ? rows : undefined}
           className={clsx(
-            "w-full border border-gray-200 bg-gray-50/50 rounded-xl py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 hover:bg-white hover:shadow-sm",
+            "w-full border border-white/10 bg-white/5 rounded-xl py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-primary/5",
             startIcon ? "pl-10" : "pl-4",
             endIcon ? "pr-12" : "pr-4",
             error && "border-red-500 focus:ring-red-500",

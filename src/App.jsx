@@ -5,7 +5,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductDetails from "./pages/ProductDetails";
 import NotFound from "./pages/NotFound";
-import TestLoader from "./pages/TestLoader";
 
 import AdminProducts from "./admin/AdminProducts";
 import AddProduct from "./admin/AddProduct";
@@ -15,6 +14,10 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminAddCategory from "./admin/AdminAddCategory";
 import AdminCategories from "./admin/AdminCategories";
 import Cart from "./pages/Cart";
+import OrderSuccess from "./pages/OrderSuccess";
+import MyOrders from "./pages/MyOrders";
+import Profile from "./pages/Profile";
+
 
 
 const router = createBrowserRouter(
@@ -27,8 +30,18 @@ const router = createBrowserRouter(
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
         { path: "/products/:id", element: <ProductDetails /> },
-        { path: "/test-loader", element: <TestLoader /> },
         { path: "/cart", element: <Cart /> },
+        { path: "/orders/success/:orderId", element: <OrderSuccess /> },
+        { path: "/orders/my", element: <MyOrders /> },
+        {
+          path: "/profile",
+          element: (
+            <ProtectedRoute allowedRoles={["USER", "ADMIN"]}>
+              <Profile />
+            </ProtectedRoute>
+          )
+        },
+
 
         // ===== ADMIN ROUTES =====
         {
@@ -95,11 +108,15 @@ const router = createBrowserRouter(
 import { ModalProvider } from "./context/ModalContext";
 import { CartProvider } from "./context/CartContext";
 
+import { ToastProvider } from "./components/ui/Toast";
+
 export default function App() {
   return (
     <ModalProvider>
       <CartProvider>
-        <RouterProvider router={router} />
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
       </CartProvider>
     </ModalProvider>
   );

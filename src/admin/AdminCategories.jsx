@@ -89,27 +89,27 @@ export default function AdminCategories() {
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">
+                    <h1 className="text-3xl font-bold text-white">
                         Manage Categories
                     </h1>
-                    <p className="text-gray-600 mt-1">
+                    <p className="text-slate-400 mt-1">
                         View, edit, and delete product categories
                     </p>
                 </div>
                 <Link to="/admin/categories/add">
-                    <Button>Add New Category</Button>
+                    <Button className="shadow-lg shadow-primary/20">Add New Category</Button>
                 </Link>
             </div>
 
             {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                <div className="bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-lg mb-4">
                     {error}
                 </div>
             )}
 
             {categories.length === 0 ? (
-                <div className="bg-white rounded-xl shadow p-12 text-center">
-                    <div className="text-gray-400 mb-4">
+                <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl shadow-lg border border-white/5 p-12 text-center">
+                    <div className="text-slate-500 mb-4">
                         <svg
                             className="w-16 h-16 mx-auto"
                             fill="none"
@@ -124,10 +124,10 @@ export default function AdminCategories() {
                             />
                         </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2">
                         No Categories Yet
                     </h3>
-                    <p className="text-gray-500 mb-6">
+                    <p className="text-slate-400 mb-6">
                         Get started by adding your first product category
                     </p>
                     <Link to="/admin/categories/add">
@@ -135,28 +135,28 @@ export default function AdminCategories() {
                     </Link>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow overflow-hidden">
-                    <table className="w-full">
-                        <thead className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl shadow-lg border border-white/5 overflow-hidden">
+                    <table className="w-full text-left">
+                        <thead className="bg-gradient-to-r from-slate-800 to-slate-900 text-white border-b border-white/10">
                             <tr>
-                                <th className="px-6 py-4 text-left text-sm font-semibold">
+                                <th className="px-6 py-4 text-sm font-semibold opacity-80">
                                     ID
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold">
+                                <th className="px-6 py-4 text-sm font-semibold opacity-80">
                                     Category Name
                                 </th>
-                                <th className="px-6 py-4 text-right text-sm font-semibold">
+                                <th className="px-6 py-4 text-right text-sm font-semibold opacity-80">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200">
+                        <tbody className="divide-y divide-white/5">
                             {categories.map((category) => (
                                 <tr
                                     key={category.id}
-                                    className="hover:bg-gray-50 transition-colors"
+                                    className="hover:bg-white/5 transition-colors duration-200"
                                 >
-                                    <td className="px-6 py-4 text-sm text-gray-600">
+                                    <td className="px-6 py-4 text-sm text-slate-400">
                                         {category.id}
                                     </td>
                                     <td className="px-6 py-4">
@@ -168,7 +168,7 @@ export default function AdminCategories() {
                                                 autoFocus
                                             />
                                         ) : (
-                                            <span className="text-gray-800 font-medium">
+                                            <span className="text-white font-bold text-lg">
                                                 {category.name}
                                             </span>
                                         )}
@@ -186,6 +186,7 @@ export default function AdminCategories() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={handleCancelEdit}
+                                                    className="border-white/10 text-white hover:bg-white/10"
                                                 >
                                                     Cancel
                                                 </Button>
@@ -196,6 +197,7 @@ export default function AdminCategories() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={() => handleEdit(category)}
+                                                    className="border-white/10 text-white hover:bg-white/10"
                                                 >
                                                     Edit
                                                 </Button>
@@ -203,7 +205,7 @@ export default function AdminCategories() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={() => handleDelete(category.id)}
-                                                    className="text-red-600 hover:bg-red-50 border-red-300"
+                                                    className="border-red-500/30 text-red-400 hover:bg-red-500/10"
                                                 >
                                                     Delete
                                                 </Button>

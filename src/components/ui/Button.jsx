@@ -4,11 +4,11 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 
 const variantClasses = {
-  primary: 'bg-primary text-white hover:bg-primary-hover focus:ring-primary shadow-lg shadow-primary/30',
-  secondary: 'bg-secondary text-white hover:bg-secondary-hover focus:ring-secondary shadow-lg shadow-secondary/30',
+  primary: 'bg-primary text-white hover:bg-primary-hover focus:ring-primary shadow-lg shadow-primary/30 hover:shadow-primary/50 overflow-hidden relative after:absolute after:inset-0 after:bg-white/20 after:translate-x-[-100%] hover:after:translate-x-[100%] after:transition-transform after:duration-500',
+  secondary: 'bg-secondary text-white hover:bg-secondary-hover focus:ring-secondary shadow-lg shadow-secondary/30 hover:shadow-secondary/50',
   danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-lg shadow-red-500/30',
   ghost: 'bg-transparent text-primary hover:bg-primary/10 focus:ring-primary',
-  gradient: 'bg-gradient-to-r from-primary to-[#FFB088] text-white hover:shadow-xl hover:shadow-primary/40 transform hover:-translate-y-0.5 focus:ring-primary',
+  gradient: 'bg-gradient-to-r from-primary to-[#FF9055] text-white hover:shadow-xl hover:shadow-primary/40 transform hover:-translate-y-0.5 focus:ring-primary border border-white/10',
   outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary'
 };
 
@@ -32,7 +32,7 @@ export function Button({
   ...props
 }) {
   const baseClasses =
-    'font-semibold rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none inline-flex items-center justify-center';
+    'font-semibold rounded-full shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none inline-flex items-center justify-center';
 
   const classes = clsx(
     baseClasses,
