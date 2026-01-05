@@ -118,6 +118,12 @@ export const loginUser = async (credentials) => {
   return data; // { token }
 };
 
+// 3️⃣ PROMOTE USER TO ADMIN
+export const promoteUserToAdmin = async (email) => {
+  const { data } = await api.put("/admin/promote", { email });
+  return data;
+};
+
 /* ========================
    USER PROFILE
 ======================== */

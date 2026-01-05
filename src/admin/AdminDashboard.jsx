@@ -86,6 +86,24 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
+        {/* Promote User to Admin */}
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Promote User
+          </h2>
+          <p className="text-slate-400 mb-6 text-sm">
+            Grant admin privileges to a user account.
+          </p>
+          <Link to="/admin/promote-user">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+              Promote to Admin
+            </Button>
+          </Link>
+        </div>
+
 
       </div>
     </div>

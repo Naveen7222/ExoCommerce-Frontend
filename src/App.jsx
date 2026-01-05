@@ -17,6 +17,7 @@ import Cart from "./pages/Cart";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import Profile from "./pages/Profile";
+import PromoteUser from "./admin/PromoteUser";
 
 
 
@@ -89,6 +90,14 @@ const router = createBrowserRouter(
           element: (
             <ProtectedRoute allowedRoles={["ADMIN"]}>
               <AdminAddCategory />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/admin/promote-user",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <PromoteUser />
             </ProtectedRoute>
           ),
         },
