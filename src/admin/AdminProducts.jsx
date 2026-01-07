@@ -54,7 +54,7 @@ export default function AdminProducts() {
   const handleDelete = (id) => {
     showModal({
       title: "Delete Product",
-      message: "Are you sure you want to delete this product? This acton cannot be undone.",
+      message: "Are you sure you want to delete this product? This action cannot be undone.",
       type: "confirm",
       onConfirm: async () => {
         try {
@@ -162,7 +162,7 @@ export default function AdminProducts() {
 
                   <td className="p-4 text-right space-x-2">
                     <Link to={`/admin/products/edit/${product.id}`}>
-                      <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                      <Button size="sm" variant="outline">
                         Edit
                       </Button>
                     </Link>

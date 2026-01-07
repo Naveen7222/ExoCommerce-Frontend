@@ -48,6 +48,11 @@ export default function AdminCategories() {
             return;
         }
 
+        if (editName.length > 50) {
+            showModal({ title: "Invalid Name", message: "Category name cannot exceed 50 characters", type: "warning" });
+            return;
+        }
+
         try {
             await updateCategory(id, { name: editName.trim() });
             setCategories(
@@ -161,12 +166,21 @@ export default function AdminCategories() {
                                     </td>
                                     <td className="px-6 py-4">
                                         {editingId === category.id ? (
-                                            <Input
-                                                value={editName}
-                                                onChange={(e) => setEditName(e.target.value)}
-                                                className="max-w-md"
-                                                autoFocus
-                                            />
+                                            <>
+                                                <Input
+                                                    value={editName}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        if (value.length <= 50) {
+                                                            setEditName(value);
+                                                        }
+                                                    }}
+                                                    maxLength={50}
+                                                    className="max-w-md"
+                                                    autoFocus
+                                                />
+                                                <p className="text-xs text-slate-400 mt-1">{editName.length}/50 characters</p>
+                                            </>
                                         ) : (
                                             <span className="text-white font-bold text-lg">
                                                 {category.name}
@@ -186,7 +200,6 @@ export default function AdminCategories() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={handleCancelEdit}
-                                                    className="border-white/10 text-white hover:bg-white/10"
                                                 >
                                                     Cancel
                                                 </Button>
@@ -197,7 +210,6 @@ export default function AdminCategories() {
                                                     size="sm"
                                                     variant="outline"
                                                     onClick={() => handleEdit(category)}
-                                                    className="border-white/10 text-white hover:bg-white/10"
                                                 >
                                                     Edit
                                                 </Button>

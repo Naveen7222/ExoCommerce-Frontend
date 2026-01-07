@@ -9,7 +9,7 @@ const variantClasses = {
   danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-lg shadow-red-500/30',
   ghost: 'bg-transparent text-primary hover:bg-primary/10 focus:ring-primary',
   gradient: 'bg-gradient-to-r from-primary to-[#FF9055] text-white hover:shadow-xl hover:shadow-primary/40 transform hover:-translate-y-0.5 focus:ring-primary border border-white/10',
-  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary'
+  outline: 'border-2 border-primary/80 text-primary hover:bg-primary hover:text-white focus:ring-primary bg-transparent'
 };
 
 const sizeClasses = {

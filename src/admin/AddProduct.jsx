@@ -37,6 +37,34 @@ export default function AddProduct() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        // Validate input lengths and values
+        if (name === 'name' && value.length > 100) {
+            showModal({
+                title: "Input Too Long",
+                message: "Product name cannot exceed 100 characters.",
+                type: "warning"
+            });
+            return;
+        }
+
+        if (name === 'description' && value.length > 500) {
+            showModal({
+                title: "Input Too Long",
+                message: "Description cannot exceed 500 characters.",
+                type: "warning"
+            });
+            return;
+        }
+
+        if (name === 'price' && parseFloat(value) < 0) {
+            return; // Prevent negative prices
+        }
+
+        if (name === 'stock' && parseInt(value) < 0) {
+            return; // Prevent negative stock
+        }
+
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -72,10 +100,27 @@ export default function AddProduct() {
         setError(null);
 
         try {
-            // Validate price
+            // Validate inputs
+            if (!formData.name.trim()) {
+                throw new Error("Product name is required");
+            }
+
+            if (formData.name.length > 100) {
+                throw new Error("Product name cannot exceed 100 characters");
+            }
+
+            if (formData.description.length > 500) {
+                throw new Error("Description cannot exceed 500 characters");
+            }
+
             const price = parseFloat(formData.price);
-            if (isNaN(price)) {
-                throw new Error("Price must be a valid number");
+            if (isNaN(price) || price < 0) {
+                throw new Error("Price must be a valid positive number");
+            }
+
+            const stock = parseInt(formData.stock);
+            if (isNaN(stock) || stock < 0) {
+                throw new Error("Stock must be a valid positive number");
             }
 
 
@@ -122,8 +167,10 @@ export default function AddProduct() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="e.g. Wireless Headphones"
+                        maxLength={100}
                         required
                     />
+                    <p className="text-xs text-slate-400 mt-1">{formData.name.length}/100 characters</p>
 
                     <Input
                         label="Description"
@@ -133,8 +180,10 @@ export default function AddProduct() {
                         placeholder="Product details..."
                         multiline
                         rows={4}
+                        maxLength={500}
                         required
                     />
+                    <p className="text-xs text-slate-400 mt-1">{formData.description.length}/500 characters</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Input
@@ -142,6 +191,7 @@ export default function AddProduct() {
                             name="price"
                             type="number"
                             step="0.01"
+                            min="0"
                             value={formData.price}
                             onChange={handleChange}
                             placeholder="99.99"
@@ -152,6 +202,7 @@ export default function AddProduct() {
                             label="Stock"
                             name="stock"
                             type="number"
+                            min="0"
                             value={formData.stock}
                             onChange={handleChange}
                             placeholder="50"

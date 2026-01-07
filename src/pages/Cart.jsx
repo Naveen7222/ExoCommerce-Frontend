@@ -173,9 +173,9 @@ export default function Cart() {
                   </div>
 
                   <div className="text-right">
-                    <p className="font-bold text-white text-lg">₹{item.total}</p>
+                    <p className="font-bold text-white text-lg">${item.total}</p>
                     <p className="text-sm text-slate-400 mb-2">
-                      ₹{item.price} / each
+                      ${item.price} / each
                     </p>
                     <Button
                       variant="danger"
@@ -195,7 +195,7 @@ export default function Cart() {
                 <h3 className="text-xl font-bold mb-6 text-white border-b border-white/10 pb-4">Order Summary</h3>
                 <div className="flex justify-between font-bold text-lg text-white mb-6">
                   <span>Total</span>
-                  <span className="text-primary">₹{grandTotal}</span>
+                  <span className="text-primary">${grandTotal}</span>
                 </div>
                 <Button
                   className="w-full py-4 text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40"

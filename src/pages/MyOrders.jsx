@@ -71,7 +71,7 @@ export default function MyOrders() {
 
             <div className="flex items-center gap-6">
               <span className="font-bold text-lg text-primary">
-                ₹{order.totalAmount}
+                ${order.totalAmount}
               </span>
 
               <span

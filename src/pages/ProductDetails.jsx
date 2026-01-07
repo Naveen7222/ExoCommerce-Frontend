@@ -6,6 +6,7 @@ import Loading from "../components/ui/Loading";
 import { addToCart } from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useModal } from "../context/ModalContext";
+import { getRole } from "../utils/auth";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -15,6 +16,9 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState(false);
+
+  const userRole = getRole();
+  const isAdmin = userRole === 'ADMIN';
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -131,12 +135,12 @@ export default function ProductDetails() {
               <Button
                 className="flex-1 py-4 text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40"
                 onClick={handleAddToCart}
-                disabled={addingToCart}
+                disabled={addingToCart || isAdmin}
                 startIcon={!addingToCart && (
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                 )}
               >
-                {addingToCart ? "Adding to Cart..." : `Add to Cart • $${product.price}`}
+                {isAdmin ? "Admin Cannot Add to Cart" : addingToCart ? "Adding to Cart..." : `Add to Cart • $${product.price}`}
               </Button>
             </div>
           </div>

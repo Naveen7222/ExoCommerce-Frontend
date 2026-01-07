@@ -86,6 +86,35 @@ export default function EditProduct() {
   ============================ */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate inputs before submission
+    if (!form.name.trim()) {
+      showModal({ title: "Error", message: "Product name is required", type: "error" });
+      return;
+    }
+
+    if (form.name.length > 100) {
+      showModal({ title: "Error", message: "Product name cannot exceed 100 characters", type: "error" });
+      return;
+    }
+
+    if (form.description.length > 500) {
+      showModal({ title: "Error", message: "Description cannot exceed 500 characters", type: "error" });
+      return;
+    }
+
+    const price = parseFloat(form.price);
+    if (isNaN(price) || price < 0) {
+      showModal({ title: "Error", message: "Price must be a valid positive number", type: "error" });
+      return;
+    }
+
+    const stock = parseInt(form.stock);
+    if (isNaN(stock) || stock < 0) {
+      showModal({ title: "Error", message: "Stock must be a valid positive number", type: "error" });
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -131,22 +160,44 @@ export default function EditProduct() {
           <Input
             label="Product Name"
             value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length > 100) {
+                showModal({
+                  title: "Input Too Long",
+                  message: "Product name cannot exceed 100 characters.",
+                  type: "warning"
+                });
+                return;
+              }
+              setForm({ ...form, name: value });
+            }}
+            maxLength={100}
             required
           />
+          <p className="text-xs text-slate-400 mt-1">{form.name.length}/100 characters</p>
 
           <Input
             label="Description"
             value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length > 500) {
+                showModal({
+                  title: "Input Too Long",
+                  message: "Description cannot exceed 500 characters.",
+                  type: "warning"
+                });
+                return;
+              }
+              setForm({ ...form, description: value });
+            }}
+            maxLength={500}
             required
             multiline
             rows={3}
           />
+          <p className="text-xs text-slate-400 mt-1">{form.description.length}/500 characters</p>
 
           {/* CATEGORY */}
           <div>
@@ -181,20 +232,27 @@ export default function EditProduct() {
             <Input
               label="Price"
               type="number"
+              step="0.01"
+              min="0"
               value={form.price}
-              onChange={(e) =>
-                setForm({ ...form, price: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                if (parseFloat(value) < 0) return;
+                setForm({ ...form, price: value });
+              }}
               required
             />
 
             <Input
               label="Stock"
               type="number"
+              min="0"
               value={form.stock}
-              onChange={(e) =>
-                setForm({ ...form, stock: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                if (parseInt(value) < 0) return;
+                setForm({ ...form, stock: value });
+              }}
             />
           </div>
 
@@ -217,8 +275,17 @@ export default function EditProduct() {
               accept="image/*"
               onChange={(e) => {
                 const file = e.target.files[0];
-                setImage(file);
                 if (file) {
+                  if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                    showModal({
+                      title: "File Too Large",
+                      message: "File size exceeds 2MB limit. Please choose a smaller image.",
+                      type: "warning"
+                    });
+                    e.target.value = null;
+                    return;
+                  }
+                  setImage(file);
                   setPreview(URL.createObjectURL(file));
                 }
               }}
@@ -243,7 +310,7 @@ export default function EditProduct() {
               type="button"
               variant="outline"
               onClick={() => navigate("/admin/products")}
-              className="flex-1 border-white/10 text-white hover:bg-white/10"
+              className="flex-1"
             >
               Cancel
             </Button>

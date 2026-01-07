@@ -13,6 +13,7 @@ import { fetchProducts, fetchCategories, addToCart } from "../services/api";
 import Loading from "../components/ui/Loading";
 import { useCart } from "../context/CartContext";
 import { useToast } from "../components/ui/Toast";
+import { getRole } from "../utils/auth";
 
 export default function Home() {
   const { refreshCart } = useCart();
@@ -25,6 +26,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState(null);
+
+  const userRole = getRole();
+  const isAdmin = userRole === 'ADMIN';
 
   const filteredProducts = products.filter((product) => {
     if (!searchQuery) return true;
@@ -250,7 +254,7 @@ export default function Home() {
                       <Button
                         className="w-full"
                         onClick={() => handleAddToCart(product.id, product.name)}
-                        disabled={addingToCart === product.id}
+                        disabled={addingToCart === product.id || isAdmin}
                         startIcon={
                           addingToCart === product.id ? (
                             <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -264,7 +268,7 @@ export default function Home() {
                           )
                         }
                       >
-                        {addingToCart === product.id ? "Adding..." : "Add to Cart"}
+                        {isAdmin ? "Admin Account" : addingToCart === product.id ? "Adding..." : "Add to Cart"}
                       </Button>
                     </CardFooter>
                   </Card>

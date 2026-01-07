@@ -20,6 +20,11 @@ export default function AdminAddCategory() {
       return;
     }
 
+    if (name.length > 50) {
+      setError("Category name cannot exceed 50 characters");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -54,10 +59,18 @@ export default function AdminAddCategory() {
           <Input
             label="Category Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length <= 50) {
+                setName(value);
+                setError(null);
+              }
+            }}
             placeholder="e.g. Mobile, Laptop"
+            maxLength={50}
             required
           />
+          <p className="text-xs text-slate-400 mt-1">{name.length}/50 characters</p>
 
           {error && (
             <div className="text-red-400 text-sm bg-red-500/10 p-3 rounded-lg border border-red-500/20">
@@ -74,7 +87,7 @@ export default function AdminAddCategory() {
               type="button"
               variant="outline"
               onClick={() => navigate(-1)}
-              className="flex-1 border-white/10 text-white hover:bg-white/10"
+              className="flex-1"
             >
               Cancel
             </Button>

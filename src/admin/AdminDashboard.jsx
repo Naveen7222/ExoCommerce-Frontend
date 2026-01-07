@@ -44,7 +44,7 @@ export default function AdminDashboard() {
             Add a new product to your store catalog.
           </p>
           <Link to="/admin/products/add">
-            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+            <Button className="w-full" variant="outline">
               Add New Product
             </Button>
           </Link>
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
             View, edit or delete product categories.
           </p>
           <Link to="/admin/categories">
-            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+            <Button className="w-full" variant="outline">
               Manage Categories
             </Button>
           </Link>
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
             Add a new product category to organize items.
           </p>
           <Link to="/admin/categories/add">
-            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+            <Button className="w-full" variant="outline">
               Add New Category
             </Button>
           </Link>
@@ -98,11 +98,11 @@ export default function AdminDashboard() {
             Grant admin privileges to a user account.
           </p>
           <Link to="/admin/promote-user">
-            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+            <Button className="w-full" variant="outline">
               Promote to Admin
             </Button>
           </Link>
-          
+
         </div>
 
         {/* Demote Admin to User */}
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
             Remove admin privileges from a user account.
           </p>
           <Link to="/admin/demote-admin">
-            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+            <Button className="w-full" variant="outline">
               Demote to User
             </Button>
           </Link>

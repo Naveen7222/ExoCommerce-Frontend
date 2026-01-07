@@ -7,8 +7,10 @@ import Loading from "../components/ui/Loading";
 import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { getUserId } from "../utils/auth";
+import { useModal } from "../context/ModalContext";
 
 export default function Profile() {
+  const { showModal } = useModal();
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
@@ -58,18 +60,80 @@ export default function Profile() {
   // HANDLERS
   // ========================
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Validate input lengths
+    if (name === 'name' && value.length > 100) {
+      showModal({
+        title: "Input Too Long",
+        message: "Name cannot exceed 100 characters.",
+        type: "warning"
+      });
+      return;
+    }
+
+    if (name === 'phone' && value.length > 20) {
+      showModal({
+        title: "Input Too Long",
+        message: "Phone number cannot exceed 20 characters.",
+        type: "warning"
+      });
+      return;
+    }
+
+    if (name === 'address' && value.length > 200) {
+      showModal({
+        title: "Input Too Long",
+        message: "Address cannot exceed 200 characters.",
+        type: "warning"
+      });
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file size (2MB limit)
+    if (file.size > 2 * 1024 * 1024) {
+      showModal({
+        title: "File Too Large",
+        message: "Image size exceeds 2MB limit. Please choose a smaller image.",
+        type: "warning"
+      });
+      e.target.value = null;
+      return;
+    }
+
     setImageFile(file);
     setPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleSave = async () => {
+    // Validate before saving
+    if (!form.name.trim()) {
+      showModal({ title: "Error", message: "Name is required", type: "error" });
+      return;
+    }
+
+    if (form.name.length > 100) {
+      showModal({ title: "Error", message: "Name cannot exceed 100 characters", type: "error" });
+      return;
+    }
+
+    if (form.phone && form.phone.length > 20) {
+      showModal({ title: "Error", message: "Phone number cannot exceed 20 characters", type: "error" });
+      return;
+    }
+
+    if (form.address && form.address.length > 200) {
+      showModal({ title: "Error", message: "Address cannot exceed 200 characters", type: "error" });
+      return;
+    }
+
     setSaving(true);
     try {
       const updated = await updateUserProfile(userId, form, imageFile);
@@ -77,9 +141,10 @@ export default function Profile() {
       setEditMode(false);
       setImageFile(null);
       setPreviewUrl(null);
+      showModal({ title: "Success", message: "Profile updated successfully", type: "success" });
     } catch (err) {
       console.error(err);
-      alert("Failed to update profile");
+      showModal({ title: "Error", message: "Failed to update profile", type: "error" });
     } finally {
       setSaving(false);
     }
@@ -155,12 +220,21 @@ export default function Profile() {
               </Button>
             ) : (
               <div className="flex gap-2 relative z-10">
-                <Button variant="ghost" onClick={() => setEditMode(false)} className="text-white hover:bg-white/20 hover:text-white">
+                <button
+                  onClick={() => setEditMode(false)}
+                  className="px-6 py-3 bg-white/90 text-primary hover:bg-white font-semibold shadow-lg rounded-full transition-all duration-300 active:scale-95"
+                  style={{ color: '#FF6B35' }}
+                >
                   Cancel
-                </Button>
-                <Button onClick={handleSave} loading={saving} className="bg-white text-primary hover:bg-orange-50 font-bold border-none shadow-lg">
-                  Save
-                </Button>
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="px-6 py-3 bg-white text-primary hover:bg-orange-50 font-bold shadow-lg rounded-full transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ color: '#FF6B35' }}
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
               </div>
             )}
           </div>
@@ -176,15 +250,19 @@ export default function Profile() {
             )}
 
             {/* NAME */}
-            <Input
-              label="Name"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              disabled={!editMode}
-              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
-              labelClassName="text-slate-300"
-            />
+            <div>
+              <Input
+                label="Name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                disabled={!editMode}
+                maxLength={100}
+                className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
+                labelClassName="text-slate-300"
+              />
+              {editMode && <p className="text-xs text-slate-400 mt-1">{form.name.length}/100 characters</p>}
+            </div>
 
             {/* EMAIL (READ ONLY) */}
             <Input
@@ -196,28 +274,36 @@ export default function Profile() {
             />
 
             {/* PHONE */}
-            <Input
-              label="Phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              disabled={!editMode}
-              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
-              labelClassName="text-slate-300"
-            />
+            <div>
+              <Input
+                label="Phone"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                disabled={!editMode}
+                maxLength={20}
+                className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
+                labelClassName="text-slate-300"
+              />
+              {editMode && <p className="text-xs text-slate-400 mt-1">{form.phone.length}/20 characters</p>}
+            </div>
 
             {/* ADDRESS */}
-            <Input
-              label="Address"
-              name="address"
-              multiline
-              rows={3}
-              value={form.address}
-              onChange={handleChange}
-              disabled={!editMode}
-              className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
-              labelClassName="text-slate-300"
-            />
+            <div>
+              <Input
+                label="Address"
+                name="address"
+                multiline
+                rows={3}
+                value={form.address}
+                onChange={handleChange}
+                disabled={!editMode}
+                maxLength={200}
+                className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50 disabled:bg-white/5"
+                labelClassName="text-slate-300"
+              />
+              {editMode && <p className="text-xs text-slate-400 mt-1">{form.address.length}/200 characters</p>}
+            </div>
           </div>
         </div>
       </div>

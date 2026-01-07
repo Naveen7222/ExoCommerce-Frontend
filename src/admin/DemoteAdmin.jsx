@@ -111,7 +111,7 @@ export default function DemoteAdmin() {
                             type="button"
                             variant="outline"
                             onClick={() => navigate(-1)}
-                            className="flex-1 border-white/10 text-white hover:bg-white/10"
+                            className="flex-1"
                         >
                             Cancel
                         </Button>
