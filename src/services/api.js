@@ -124,6 +124,12 @@ export const promoteUserToAdmin = async (email) => {
   return data;
 };
 
+// 4️⃣ DEMOTE ADMIN TO USER
+export const demoteAdminToUser = async (email) => {
+  const { data } = await api.put("/admin/demote", { email });
+  return data;
+};
+
 /* ========================
    USER PROFILE
 ======================== */

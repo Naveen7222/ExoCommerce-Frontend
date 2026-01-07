@@ -102,6 +102,25 @@ export default function AdminDashboard() {
               Promote to Admin
             </Button>
           </Link>
+          
+        </div>
+
+        {/* Demote Admin to User */}
+        <div className="bg-[#1E293B]/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-white/5 hover:border-primary/50 transition-colors group">
+          <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Demote Admin
+          </h2>
+          <p className="text-slate-400 mb-6 text-sm">
+            Remove admin privileges from a user account.
+          </p>
+          <Link to="/admin/demote-admin">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
+              Demote to User
+            </Button>
+          </Link>
         </div>
 
 

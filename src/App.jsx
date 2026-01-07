@@ -18,6 +18,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import Profile from "./pages/Profile";
 import PromoteUser from "./admin/PromoteUser";
+import DemoteAdmin from "./admin/DemoteAdmin";
 
 
 
@@ -98,6 +99,14 @@ const router = createBrowserRouter(
           element: (
             <ProtectedRoute allowedRoles={["ADMIN"]}>
               <PromoteUser />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/admin/demote-admin",
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <DemoteAdmin />
             </ProtectedRoute>
           ),
         },
