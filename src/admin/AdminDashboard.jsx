@@ -26,7 +26,7 @@ export default function AdminDashboard() {
             View, edit or delete products from your inventory.
           </p>
           <Link to="/admin/products">
-            <Button className="w-full shadow-lg shadow-primary/20">
+            <Button className="w-full border-white/10 text-white hover:bg-white/10" variant="outline">
               Manage Products
             </Button>
           </Link>
