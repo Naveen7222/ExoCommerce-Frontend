@@ -27,7 +27,7 @@ export const getRole = () => {
   const user = getUserFromToken();
   return user?.role || null;
 };
-
+ 
 export const getUserId = () => {
   const user = getUserFromToken();
   return user?.id || null;

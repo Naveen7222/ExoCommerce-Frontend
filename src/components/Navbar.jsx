@@ -106,29 +106,6 @@ export default function Navbar() {
       },
     });
   };
-  useEffect(() => {
-    const loadUser = async () => {
-      if (!isAuthenticated || isAdmin || !userId) {
-        setUser(null);
-        setImageError(false);
-        return;
-      }
-
-      try {
-        setUser(null);          // 👈 add
-        setImageError(false);   // 👈 add
-
-        const data = await fetchUserProfileById(userId);
-        setUser(data);
-      } catch {
-        setUser(null);
-      }
-    };
-
-    loadUser();
-  }, [isAuthenticated, isAdmin, userId]);
-
-
   // Helper component for Nav Links
   const NavLink = ({ to, children }) => (
     <Link
