@@ -190,7 +190,7 @@ export default function Profile() {
                   <img
                     src={
                       previewUrl ||
-                      `http://localhost:8080${user.profileImageUrl}`
+                      `${import.meta.env.VITE_API_BASE_URL}${user.profileImageUrl}`
                     }
                     alt={user.name}
                     className="w-full h-full object-cover"

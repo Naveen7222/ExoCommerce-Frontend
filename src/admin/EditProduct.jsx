@@ -4,12 +4,7 @@ import { Button } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Loading from "../components/ui/Loading";
 
-import axios from "axios";
-import { fetchCategories } from "../services/api";
-
-const api = axios.create({
-  baseURL: "http://localhost:8080",
-});
+import api, { fetchCategories } from "../services/api";
 
 import { useModal } from "../context/ModalContext";
 

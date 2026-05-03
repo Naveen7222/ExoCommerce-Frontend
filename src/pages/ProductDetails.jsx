@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api, { addToCart } from "../services/api";
 import { Button } from "../components/ui/Button";
 import Loading from "../components/ui/Loading";
-import { addToCart } from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useModal } from "../context/ModalContext";
 import { getRole } from "../utils/auth";
@@ -23,7 +22,7 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/products/${id}`);
+        const res = await api.get(`/products/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error(err);

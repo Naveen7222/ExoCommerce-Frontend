@@ -219,7 +219,7 @@ export default function Navbar() {
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-slate-700 to-slate-800 text-white flex items-center justify-center font-bold shadow-md ring-2 ring-[#0F172A]">
                       {user?.hasProfileImage && !imageError ? (
                         <img
-                          src={`http://localhost:8080${user.profileImageUrl}?uid=${user.id}&t=${user.updatedAt}`}
+                          src={`${import.meta.env.VITE_API_BASE_URL}${user.profileImageUrl}?uid=${user.id}&t=${user.updatedAt}`}
                           onError={() => setImageError(true)}
                           alt={user?.name}
                           className="w-full h-full object-cover"
