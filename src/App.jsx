@@ -117,10 +117,7 @@ const router = createBrowserRouter(
         },
       ],
     },
-  ],
-  {
-    basename: "/exocommerce",
-  }
+  ]
 );
 
 import { ModalProvider } from "./context/ModalContext";
