@@ -46,6 +46,15 @@ export default function Register() {
     setPreviewUrl(URL.createObjectURL(file));
   };
 
+  const fillTestData = () => {
+    setName("John Doe");
+    setEmail("test@example.com");
+    setPassword("Test@123");
+    setPhone("9876543210");
+    setAddress("123 Test Street, Test City, TC 12345");
+    addToast("Test data filled!", "success");
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -172,6 +181,16 @@ export default function Register() {
               className="text-white placeholder-slate-500 border-white/10 focus:border-primary bg-white/5 hover:bg-white/10 transition-colors"
               labelClassName="text-slate-300"
             />
+
+            {/* TEMPORARY: Test Data Button */}
+            <Button
+              type="button"
+              onClick={fillTestData}
+              variant="secondary"
+              className="w-full py-2 text-sm font-semibold"
+            >
+              [TEMP] Fill Test Data
+            </Button>
 
             <Button
               type="submit"
