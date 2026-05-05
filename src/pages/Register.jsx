@@ -55,46 +55,61 @@ export default function Register() {
     addToast("Test data filled!", "success");
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleRegister = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    // ✅ STEP 1: AUTH (MANDATORY)
+    const { authUserId } = await registerAuthUser({ email, password });
+
+    // Prepare profile data
+    const formData = new FormData();
+    formData.append(
+      "user",
+      JSON.stringify({
+        authUserId,
+        name,
+        email,
+        phone,
+        address,
+      })
+    );
+
+    if (profileImg) {
+      formData.append("image", profileImg);
+    }
+
+    let profileCreated = true;
 
     try {
-      // 1️⃣ Register auth user
-      const { authUserId } = await registerAuthUser({ email, password });
-
-      // 2️⃣ Create user profile (multipart)
-      const formData = new FormData();
-      formData.append(
-        "user",
-        JSON.stringify({
-          authUserId,
-          name,
-          email,
-          phone,
-          address,
-        })
-      );
-
-      if (profileImg) {
-        formData.append("image", profileImg);
-      }
-
+      // ✅ STEP 2: PROFILE (OPTIONAL)
       await createUserProfile(formData);
-
-      addToast(
-        "Account created successfully! Redirecting to login...",
-        "success"
-      );
-
-      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      console.error(err);
-      addToast("Registration failed. Please try again.", "error");
-    } finally {
-      setLoading(false);
+      profileCreated = false;
+      console.error("Profile creation failed:", err);
     }
-  };
+
+    // ✅ STEP 3: RESULT HANDLING
+    if (profileCreated) {
+      addToast("Account created successfully!", "success");
+    } else {
+      addToast(
+        "Account created, but profile setup is pending",
+        "warning"
+      );
+    }
+
+    setTimeout(() => navigate("/login"), 2000);
+
+  } catch (err) {
+    // ❌ Only when AUTH fails
+    console.error("Auth failed:", err);
+    addToast("Registration failed. Please try again.", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-900 py-10">
@@ -187,7 +202,7 @@ export default function Register() {
               type="button"
               onClick={fillTestData}
               variant="secondary"
-              className="w-full py-2 text-sm font-semibold"
+              className="w-full py-2 text-sm font-semibold text-amber-300"
             >
               [TEMP] Fill Test Data
             </Button>

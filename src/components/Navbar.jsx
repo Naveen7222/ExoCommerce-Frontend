@@ -56,7 +56,7 @@ export default function Navbar() {
         const data = await fetchUserProfileById(userId);
         setUser(data);
         setImageError(false);
-      } catch (err) {
+      } catch {
         setUser(null);
       }
     };

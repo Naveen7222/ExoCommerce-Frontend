@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, createContext, useContext } from "react";
 import clsx from "clsx";
 
