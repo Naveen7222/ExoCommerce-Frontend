@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useToast } from "./components/ui/Toast";
-import { API_BASE_URL } from "./services/api";
+import { ServiceWakeup } from "./components/ServiceWakeup";
 import AppLayout from "./layouts/AppLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -129,40 +128,11 @@ import { CartProvider } from "./context/CartContext";
 import { ToastProvider } from "./components/ui/Toast";
 
 export default function App() {
-  const { addToast } = useToast();
-
-  useEffect(() => {
-    const wakeServices = async () => {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-        const authHealth = fetch(
-          `${API_BASE_URL}/auth/health`,
-          { signal: controller.signal }
-        ).catch(() => null);
-
-        const productsHealth = fetch(
-          `${API_BASE_URL}/products/health`,
-          { signal: controller.signal }
-        ).catch(() => null);
-
-        await Promise.all([authHealth, productsHealth]);
-        clearTimeout(timeout);
-        addToast("Services woken up successfully", "success", 2000);
-      } catch (error) {
-        console.log("Wake-up failed:", error.message);
-        addToast("Services wake-up failed", "warning", 2000);
-      }
-    };
-
-    wakeServices();
-  }, [addToast]);
-
   return (
     <ModalProvider>
       <CartProvider>
         <ToastProvider>
+          <ServiceWakeup />
           <RouterProvider router={router} />
         </ToastProvider>
       </CartProvider>
