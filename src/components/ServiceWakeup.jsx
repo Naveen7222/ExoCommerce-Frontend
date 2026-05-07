@@ -1,15 +1,14 @@
 import { useEffect } from "react";
-import { useToast } from "./ui/Toast";
 import { API_BASE_URL } from "../services/api";
 
 export function ServiceWakeup() {
-  const { addToast } = useToast();
-
   useEffect(() => {
     const wakeServices = async () => {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        console.log("🚀 Waking up services...");
 
         const authHealth = fetch(
           `${API_BASE_URL}/auth/health`,
@@ -23,15 +22,14 @@ export function ServiceWakeup() {
 
         await Promise.all([authHealth, productsHealth]);
         clearTimeout(timeout);
-        addToast("Services woken up successfully", "success", 2000);
+        console.log("✅ Services woken up successfully");
       } catch (error) {
-        console.log("Wake-up failed:", error.message);
-        addToast("Services wake-up failed", "warning", 2000);
+        console.log("⚠️ Wake-up failed:", error.message);
       }
     };
 
     wakeServices();
-  }, [addToast]);
+  }, []);
 
   return null;
 }
