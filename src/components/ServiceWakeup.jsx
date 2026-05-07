@@ -45,13 +45,13 @@ export function ServiceWakeup() {
 
       const authReady = await checkService(
         "Auth",
-        `${API_BASE_URL}/auth/health`,
+        `https://auth-service-0d8y.onrender.com/auth/health`,
         controller.signal
       );
 
       const productReady = await checkService(
         "Product",
-        `${API_BASE_URL}/products/health`,
+        `https://exocommerce-backend-g7v3.onrender.com/products/health`,
         controller.signal
       );
 
