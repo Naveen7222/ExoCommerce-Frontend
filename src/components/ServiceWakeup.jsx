@@ -48,9 +48,27 @@ export function ServiceWakeup() {
         controller.signal
       );
 
+      const cartReady = await checkService(
+        "Cart",
+        "https://cart-service-r100.onrender.com/carts/health",
+        controller.signal
+      );
+
+      const userReady = await checkService(
+        "User",
+        "https://user-service-f0b9.onrender.com/users/health",
+        controller.signal
+      );
+
+      const orderReady = await checkService(
+        "Order",
+        "https://order-service-xq1w.onrender.com/orders/health",
+        controller.signal
+      );
+
       clearTimeout(timeout);
 
-      if (authReady && productReady) {
+      if (authReady && productReady && cartReady && userReady && orderReady) {
 
         console.log("✅ Wake requests sent successfully");
 
