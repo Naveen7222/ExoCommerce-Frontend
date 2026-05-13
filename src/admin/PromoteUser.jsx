@@ -50,15 +50,15 @@ export default function PromoteUser() {
                 setError("User not found with this email");
             } else if (err.response?.status === 400) {
                 const errorMsg = typeof err.response?.data === 'string'
-                    ? err.response.data
-                    : err.response?.data?.error || "User is already an admin";
+                    ? err.response?.data?.message
+                    : err.response?.data?.message || "User is already an admin";
                 setError(errorMsg);
             } else if (err.response?.status === 403) {
                 setError("You don't have permission to perform this action");
             } else {
                 const errorMsg = typeof err.response?.data === 'string'
-                    ? err.response.data
-                    : err.response?.data?.error || "Failed to promote user";
+                    ? err.response?.data?.message
+                    : err.response?.data?.message || "Failed to promote user";
                 setError(errorMsg);
             }
         } finally {

@@ -78,7 +78,7 @@ export default function Cart() {
       showModal({
         title: "Checkout Failed",
         message:
-          err.response?.data?.error ||
+          err.response?.data?.message ||
           "Something went wrong while placing the order.",
         type: "error",
       });

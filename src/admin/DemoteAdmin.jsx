@@ -50,15 +50,15 @@ export default function DemoteAdmin() {
                 setError("User not found with this email");
             } else if (err.response?.status === 400) {
                 const errorMsg = typeof err.response?.data === 'string'
-                    ? err.response.data
-                    : err.response?.data?.error || "User is not an admin";
+                    ? err.response?.data?.message
+                    : err.response?.data?.message || "User is not an admin";
                 setError(errorMsg);
             } else if (err.response?.status === 403) {
                 setError("You don't have permission to perform this action");
             } else {
                 const errorMsg = typeof err.response?.data === 'string'
-                    ? err.response.data
-                    : err.response?.data?.error || "Failed to demote admin";
+                    ? err.response?.data?.message
+                    : err.response?.data?.message || "Failed to demote admin";
                 setError(errorMsg);
             }
         } finally {

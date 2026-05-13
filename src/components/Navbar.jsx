@@ -94,7 +94,6 @@ export default function Navbar() {
       onConfirm: () => {
         logout();
 
-        // ✅ CLEAR USER-SPECIFIC STATE
         setUser(null);
         setImageError(false);
 

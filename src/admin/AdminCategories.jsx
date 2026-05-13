@@ -64,7 +64,7 @@ export default function AdminCategories() {
             setEditName("");
         } catch (err) {
             console.error(err);
-            showModal({ title: "Update Failed", message: err.response?.data || "Failed to update category", type: "error" });
+            showModal({ title: "Update Failed", message: err.response?.data?.message || "Failed to update category", type: "error" });
         }
     };
 
@@ -80,7 +80,7 @@ export default function AdminCategories() {
                     showModal({ title: "Success", message: "Category deleted successfully", type: "success" });
                 } catch (err) {
                     console.error(err);
-                    showModal({ title: "Delete Failed", message: err.response?.data || "Failed to delete category", type: "error" });
+                    showModal({ title: "Delete Failed", message: err.response?.data?.message || "Failed to delete category", type: "error" });
                 }
             }
         });
