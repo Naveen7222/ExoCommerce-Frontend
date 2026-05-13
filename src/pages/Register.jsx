@@ -49,7 +49,7 @@ export default function Register() {
   const fillTestData = () => {
     setName("John Doe");
     setEmail("test@example.com");
-    setPassword("Test@123");
+    setPassword("u123");
     setPhone("9876543210");
     setAddress("123 Test Street, Test City, TC 12345");
     addToast("Test data filled!", "success");
